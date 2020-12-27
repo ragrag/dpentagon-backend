@@ -12,7 +12,7 @@ schemes:
 
 paths:
 # [POST] /api/v1/signup
-  /api/v1/signup:
+  /api/v1/register:
     post:
       tags:
       - Authentication
