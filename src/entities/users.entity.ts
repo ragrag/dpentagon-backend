@@ -1,5 +1,15 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
+  Index,
+} from 'typeorm';
 
 @Entity()
 @Unique(['email'])
@@ -7,27 +17,28 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({ nullable: false })
   email: string;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({ nullable: false })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   displayName: string;
 
-  @Column()
+  @Column({ nullable: true })
+  profileInfo: string;
+
+  @Column({ nullable: true })
   socialProvider: string;
 
-  @Column()
+  @Column({ nullable: true })
   socialProviderId: string;
 
-  @Column()
+  @Column({ nullable: true })
   photo: string;
 
-  @Column()
+  @Column({ nullable: true, default: false })
   verified: boolean;
 
   @Column()
@@ -37,4 +48,15 @@ export class User extends BaseEntity {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToMany(type => User, user => user.following)
+  @JoinTable()
+  followers: User[];
+
+  @ManyToMany(type => User, user => user.followers)
+  following: User[];
+
+  followersCount: number;
+
+  followingCount: number;
 }

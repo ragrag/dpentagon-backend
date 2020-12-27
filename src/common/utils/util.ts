@@ -11,3 +11,8 @@ export const isEmpty = (value: any): boolean => {
     return false;
   }
 };
+
+export const convertBase64ToBuffer = photo => {
+  const imageBuffer = Buffer.from(photo, 'base64');
+  return imageBuffer;
+};

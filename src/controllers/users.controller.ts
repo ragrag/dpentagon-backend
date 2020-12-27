@@ -1,16 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateUserDto } from '../common/dtos/users.dto';
+import * as _ from 'lodash';
+import { UpdateUserDTO, UpdateUserPasswordDTO } from '../common/dtos';
+import { RequestWithUser } from '../common/interfaces/auth.interface';
 import { User } from '../entities/users.entity';
 import userService from '../services/users.service';
 
 class UsersController {
   public userService = new userService();
 
-  public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllUsersData: User[] = await this.userService.findAllUser();
-
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      const userResponse = _.omit(req.user, ['password']);
+      res.status(200).json({ ...userResponse });
     } catch (error) {
       next(error);
     }
@@ -27,24 +28,28 @@ class UsersController {
     }
   };
 
-  public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public updateUser = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
-      const createUserData: User = await this.userService.createUser(userData);
+      const userId = Number(req.user.id);
+      const { displayName, photo, profileBio }: UpdateUserDTO = req.body;
+      const updateUserDTO: UpdateUserDTO = { displayName, photo, profileBio };
+      await this.userService.updateUser(userId, updateUserDTO);
 
-      res.status(201).json({ data: createUserData, message: 'created' });
+      res.status(200).json();
     } catch (error) {
       next(error);
     }
   };
 
-  public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public updateUserPassoword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userId = Number(req.params.id);
-      const userData: User = req.body;
-      const updateUserData: User = await this.userService.updateUser(userId, userData);
+      const userId = Number(req.user.id);
+      const { oldPassword, newPassword }: UpdateUserPasswordDTO = req.body;
 
-      res.status(200).json({ data: updateUserData, message: 'updated' });
+      const updateUserPasswordDTO: UpdateUserPasswordDTO = { oldPassword, newPassword };
+      await this.userService.updateUserPassword(userId, updateUserPasswordDTO);
+
+      res.status(200).json();
     } catch (error) {
       next(error);
     }

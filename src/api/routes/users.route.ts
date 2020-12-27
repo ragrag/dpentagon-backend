@@ -1,6 +1,8 @@
 import { Router } from 'express';
+import passport from 'passport';
+import '../middlewares/passport';
 import UsersController from '../../controllers/users.controller';
-import { CreateUserDto } from '../../common/dtos/users.dto';
+import { UpdateUserDTO, UpdateUserPasswordDTO } from '../../common/dtos';
 import Route from '../../common/interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
@@ -15,11 +17,15 @@ class UsersRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.usersController.getUsers);
+    this.router.get(`/user`, [jwtAuthMiddeware], this.usersController.getUser);
     this.router.get(`${this.path}/:id`, [jwtAuthMiddeware], this.usersController.getUserById);
-    this.router.post(`${this.path}`, validationMiddleware(CreateUserDto, 'body'), this.usersController.createUser);
-    this.router.put(`${this.path}/:id`, validationMiddleware(CreateUserDto, 'body', true), this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id`, this.usersController.deleteUser);
+    this.router.put(`${this.path}`, [jwtAuthMiddeware], validationMiddleware(UpdateUserDTO, 'body', true), this.usersController.updateUser);
+    this.router.put(
+      `${this.path}/password`,
+      [jwtAuthMiddeware, validationMiddleware(UpdateUserPasswordDTO, 'body', true)],
+      this.usersController.updateUserPassoword,
+    );
+    this.router.delete(`${this.path}`, [jwtAuthMiddeware], this.usersController.deleteUser);
   }
 }
 

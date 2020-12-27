@@ -18,8 +18,8 @@ class AuthRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post('/signup', validationMiddleware(CreateUserDto, 'body'), this.authController.signUp);
-    this.router.post('/login', validationMiddleware(CreateUserDto, 'body'), this.authController.logIn);
+    this.router.post('/register', validationMiddleware(CreateUserDto, 'body'), this.authController.register);
+    this.router.post('/login', validationMiddleware(CreateUserDto, 'body'), this.authController.login);
     this.router.post('/logout', [jwtAuthMiddeware], this.authController.logOut);
     this.router.post(
       `/oauth/facebook`,

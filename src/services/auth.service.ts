@@ -7,7 +7,7 @@ import { User } from '../entities/users.entity';
 import { isEmpty } from '../common/utils/util';
 
 class AuthService {
-  public async signup(userData: CreateUserDto): Promise<User> {
+  public async register(userData: CreateUserDto): Promise<User> {
     if (isEmpty(userData)) throw Boom.badRequest();
 
     const findUser: User = await User.findOne({ where: { email: userData.email } });

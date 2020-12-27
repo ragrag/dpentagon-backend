@@ -77,10 +77,11 @@ class App {
   private initializeSwagger() {
     const options = {
       swaggerDefinition: {
+        openapi: '3.0.0',
         info: {
-          title: 'REST API',
+          title: 'User Service',
           version: '1.0.0',
-          description: 'Example docs',
+          description: 'API Documentation',
         },
       },
       apis: ['swagger.yaml'],
