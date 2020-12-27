@@ -1,7 +1,7 @@
 {
-  "name": "elastic-typeScript-express",
+  "name": "dpentagon",
   "version": "0.0.0",
-  "description": "TypeScript + TypeORM + PostgreSQL + Express API Server",
+  "description": "",
   "author": "",
   "license": "ISC",
   "scripts": {
