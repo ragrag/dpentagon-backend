@@ -43,6 +43,7 @@
     "passport-jwt-cookiecombo": "^1.0.5",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
+    "supertest": "^6.0.1",
     "swagger-jsdoc": "^6.0.0-rc.3",
     "swagger-ui-express": "^4.1.5",
     "ts-jest": "^26.4.4",
@@ -82,7 +83,7 @@
     "husky": "^4.3.0",
     "node-gyp": "^7.1.2",
     "nodemon": "^2.0.6",
-    "prettier": "^2.2.1",
-    "supertest": "^6.0.1"
+    "prettier": "^2.2.1"
+    
   }
 }
