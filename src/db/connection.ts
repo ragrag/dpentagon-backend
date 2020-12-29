@@ -3,6 +3,7 @@ import { ConnectionOptions } from 'typeorm';
 const env = process.env.NODE_ENV || 'development';
 const dbConnectionUrls = {
   production: process.env.DATABASE_URL,
+  migration: process.env.DATABASE_URL,
   development: process.env.DATABASE_URL_DEV,
   testing: process.env.DATABASE_URL_TEST,
 };
@@ -20,7 +21,8 @@ const dbConnection: ConnectionOptions = {
     migrationsDir: 'src/db/migrations',
     subscribersDir: 'src/db/subscribers',
   },
-  migrationsRun: true,
+
+  // migrationsRun: true,
 };
 
 export = dbConnection;

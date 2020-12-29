@@ -4,7 +4,7 @@ const validateEnv = () => {
   cleanEnv(process.env, {
     NODE_ENV: str(),
     PORT: port(),
-    DATABASE_URL_PROD: str(),
+    DATABASE_URL: str(),
     DATABASE_URL_DEV: str(),
     FACEBOOK_APP_ID: str(),
     FACEBOOK_APP_SECRET: str(),
