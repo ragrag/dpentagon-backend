@@ -1,26 +1,31 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as Boom from '@hapi/boom';
-import { CreateUserDto } from '../common/dtos/users.dto';
+import { CreateUserDTO } from '../common/dtos/user/createUser.dto';
 import { DataStoredInToken, TokenData } from '../common/interfaces/auth.interface';
 import { User } from '../entities/users.entity';
 import { isEmpty } from '../common/utils/util';
+import { Profession } from '../entities/profession.entity';
+import { plainToClass } from 'class-transformer';
+import { LoginUserDTO } from '../common/dtos';
 
 class AuthService {
-  public async register(userData: CreateUserDto): Promise<User> {
+  public async register(userData: CreateUserDTO): Promise<User> {
     if (isEmpty(userData)) throw Boom.badRequest();
 
     const findUser: User = await User.findOne({ where: { email: userData.email } });
-    if (findUser) throw Boom.conflict(`You're email ${userData.email} already exists`);
+    if (findUser) throw Boom.conflict(`a user with the email ${userData.email} already exists`);
+
+    const profession: Profession = await Profession.findOne(userData.professionId);
+    if (!profession) throw Boom.notFound("Profession doesn't exist");
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const createUserData: User = await User.save({ ...userData, password: hashedPassword } as User);
+
+    const createUserData: User = await User.save(plainToClass(User, { ...userData, password: hashedPassword, profession: profession }));
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ token: string; findUser: User }> {
-    if (isEmpty(userData)) throw Boom.badRequest();
-
+  public async login(userData: LoginUserDTO): Promise<{ token: string; findUser: User }> {
     const findUser: User = await User.findOne({ where: { email: userData.email } });
     if (!findUser) throw Boom.notFound();
 

@@ -13,6 +13,10 @@ const validateEnv = () => {
     GITHUB_CLIENT_ID: str(),
     GITHUB_CLIENT_SECRET: str(),
     JWT_SECRET: str(),
+    GCS_TYPE: str(),
+    GCS_PROJECT_ID: str(),
+    GCS_PRIVATE_KEY: str(),
+    GCS_CLIENT_EMAIL: str(),
   });
 };
 

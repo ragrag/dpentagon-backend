@@ -4,10 +4,11 @@ import '../middlewares/passport';
 import githubAccessTokenMiddleware from '../middlewares/githubAccessToken.middleware';
 import googleAccessTokenMiddleware from '../middlewares/googleAccessToken.middleware';
 import AuthController from '../../controllers/auth.controller';
-import { CreateUserDto } from '../../common/dtos/users.dto';
+import { CreateUserDTO } from '../../common/dtos/user/createUser.dto';
 import Route from '../../common/interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
+import { LoginUserDTO } from '../../common/dtos';
 
 class AuthRoute implements Route {
   public router = Router();
@@ -18,8 +19,8 @@ class AuthRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post('/register', validationMiddleware(CreateUserDto, 'body'), this.authController.register);
-    this.router.post('/login', validationMiddleware(CreateUserDto, 'body'), this.authController.login);
+    this.router.post('/register', validationMiddleware(CreateUserDTO, 'body'), this.authController.register);
+    this.router.post('/login', validationMiddleware(LoginUserDTO, 'body'), this.authController.login);
     this.router.post('/logout', [jwtAuthMiddeware], this.authController.logOut);
     this.router.post(
       `/oauth/facebook`,

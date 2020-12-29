@@ -22,18 +22,6 @@ class UserService {
     return findUser;
   }
 
-  public async createUser(userData: CreateUserDTO): Promise<User> {
-    if (isEmpty(userData)) throw Boom.badRequest();
-
-    const findUser: User = await User.findOne({ where: { email: userData.email } });
-    if (findUser) throw Boom.conflict(`Your email ${userData.email} already exists`);
-
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const createdUser: User = await User.save({ ...userData, password: hashedPassword } as User);
-    eventEmitter.emit(this.Events.USER_CREATED, createdUser.email);
-    return createdUser;
-  }
-
   public async updateUser(userId: number, updateUserDTO: UpdateUserDTO): Promise<void> {
     if (isEmpty(updateUserDTO)) throw Boom.badRequest();
 

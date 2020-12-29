@@ -26,9 +26,32 @@ paths:
                 email:
                   type: string
                   description: user email
+                  example: youssefelzanaty@gmail.com
                 password:
                   type: string
                   description: user password
+                  example: a11y23q
+                userType:
+                  type: string
+                  description: user type
+                  example : personal
+                professionId:
+                  type: number
+                  description: profession id
+                  example: 1
+                displayName:
+                  type: string
+                  description: display name
+                  example: Youssef ElZanaty
+                country:
+                  type: string
+                  description: country
+                  example: Egypt
+                phoneNumber:
+                  type: string
+                  description: phone number
+                  example: "+201001042218"
+               
       responses:
         201:
           description: 'Created'
@@ -58,9 +81,11 @@ paths:
                   email:
                     type: string
                     description: user email
+                    example: youssefelzanaty@gmail.com
                   password:
                     type: string
                     description: user password
+                    example: a11y23q
               - type: object
                 properties:
                   password:
@@ -124,16 +149,22 @@ paths:
             schema:
               type: object
               properties:
+                professionId:
+                  type: number
+                  description: profession id
+                  example: 1
                 displayName:
                   type: string
-                  description: user displayName
-                profileInfo:
+                  description: display name
+                  example: Youssef ElZanaty
+                country:
                   type: string
-                  description: user description
-                photo:
+                  description: country
+                  example: Egypt
+                phoneNumber:
                   type: string
-                  format: base64
-                  description: user photo
+                  description: phone number
+                  example: "+201001042218"
       responses:
         200:
           description: 'Ok'
@@ -154,19 +185,34 @@ components:
     User:
       type: object
       properties:
-        id:
-          type: string
         email:
           type: string
-        displayName:
-          type: string
+          description: user email
         profileInfo:
           type: string
-        photo:
+          description: user profile info
+        userType:
           type: string
-        verified:  
+          description: user type
+        profession:
+          type: object
+          description: user profession
+          properties:
+            id: 
+              type: number
+              description: profession id
+            name:
+              type: string
+              description: profession name
+        displayName:
           type: string
-
+          description: display name
+        country:
+          type: string
+          description: country
+        phoneNumber:
+          type: string
+          description: phone number
 
     UserWithToken:
       allOf:     

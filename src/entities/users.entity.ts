@@ -1,17 +1,22 @@
+import { IsPhoneNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  Unique,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
+  Entity,
   Index,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
 } from 'typeorm';
+import { Post } from './post.entity';
+import { Profession } from './profession.entity';
 
-@Entity()
+@Entity('user')
 @Unique(['email'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -23,7 +28,19 @@ export class User extends BaseEntity {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'enum', enum: ['company', 'personal'], nullable: false })
+  userType: string;
+
+  @Index()
+  @ManyToOne(() => Profession, profession => profession.users, { eager: true })
+  profession: Profession;
+
+  @Index()
+  @Column({ nullable: false })
+  country: string;
+
+  @Index()
+  @Column({ nullable: false })
   displayName: string;
 
   @Column({ nullable: true })
@@ -37,6 +54,12 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   photo: string;
+
+  @OneToMany(() => Post, post => post.user)
+  posts: Post[];
+
+  @Column({ nullable: true })
+  phoneNumber: string;
 
   @Column({ nullable: true, default: false })
   verified: boolean;

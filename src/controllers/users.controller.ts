@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import { NextFunction, Request, Response } from 'express';
 import * as _ from 'lodash';
 import { UpdateUserDTO, UpdateUserPasswordDTO } from '../common/dtos';
@@ -31,8 +32,8 @@ class UsersController {
   public updateUser = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.user.id);
-      const { displayName, photo, profileBio }: UpdateUserDTO = req.body;
-      const updateUserDTO: UpdateUserDTO = { displayName, photo, profileBio };
+
+      const updateUserDTO: UpdateUserDTO = plainToClass(UpdateUserDTO, req.body, { excludeExtraneousValues: true });
       await this.userService.updateUser(userId, updateUserDTO);
 
       res.status(200).json();

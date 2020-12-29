@@ -1,16 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import * as _ from 'lodash';
-import { CreateUserDto } from '../common/dtos/users.dto';
+import { CreateUserDTO } from '../common/dtos/user/createUser.dto';
 import { RequestWithUser } from '../common/interfaces/auth.interface';
 import { User } from '../entities/users.entity';
 import AuthService from '../services/auth.service';
-
+import { plainToClass } from 'class-transformer';
+import { LoginUserDTO } from '../common/dtos';
 class AuthController {
   public authService = new AuthService();
 
   public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: CreateUserDTO = plainToClass(CreateUserDTO, req.body, { excludeExtraneousValues: true });
       const signUpUserData: User = await this.authService.register(userData);
 
       res.status(201).json({ id: signUpUserData.id });
@@ -21,7 +22,7 @@ class AuthController {
 
   public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: LoginUserDTO = plainToClass(LoginUserDTO, req.body);
       const { token, findUser } = await this.authService.login(userData);
 
       res.cookie('Authorization', token, {
@@ -30,11 +31,11 @@ class AuthController {
         sameSite: 'strict',
         secure: true,
       });
-      const userResponse = _.pick(req.user, ['email', 'displayName', 'id']);
+
+      const userResponse = _.omit(findUser, ['password']);
 
       res.status(200).json({ ...userResponse, token });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };
