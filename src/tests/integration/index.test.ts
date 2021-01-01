@@ -15,7 +15,7 @@ beforeEach(async () => {
   await db.clear();
 });
 
-describe('Testing Index', () => {
+describe('Index', () => {
   describe('[GET] /', () => {
     it('response statusCode 200', async done => {
       const res = await request(app.getServer()).get(`/api/v1/`);

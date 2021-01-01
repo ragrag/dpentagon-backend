@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import * as _ from 'lodash';
-import { CreateUserDTO } from '../common/dtos/user/createUser.dto';
+import { CreateUserDTO } from '../common/dtos/auth/createUser.dto';
 import { RequestWithUser } from '../common/interfaces/auth.interface';
 import { User } from '../entities/users.entity';
 import AuthService from '../services/auth.service';
 import { plainToClass } from 'class-transformer';
 import { LoginUserDTO } from '../common/dtos';
+import { eventEmitter, Events } from '../common/utils/eventEmitter';
 class AuthController {
   public authService = new AuthService();
 
@@ -13,7 +14,7 @@ class AuthController {
     try {
       const userData: CreateUserDTO = plainToClass(CreateUserDTO, req.body, { excludeExtraneousValues: true });
       const user: User = await this.authService.register(userData);
-      const token = this.authService.createToken(user);
+      const token = AuthService.createToken(user);
 
       res.cookie('Authorization', token, {
         httpOnly: true,
@@ -22,8 +23,8 @@ class AuthController {
         secure: true,
       });
 
+      eventEmitter.emit(Events.USER_REGISTRATION, { email: user.email });
       const userResponse = _.omit(user, ['password']);
-
       res.status(201).json({ ...userResponse, token });
     } catch (error) {
       next(error);
@@ -51,7 +52,7 @@ class AuthController {
   };
 
   public authenticateSocial = async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = await this.authService.createToken(req.user as User);
+    const { token } = await AuthService.createToken(req.user as User);
 
     res.cookie('Authorization', token, {
       httpOnly: true,
@@ -63,7 +64,39 @@ class AuthController {
     return res.status(200).json({ token: token, ...userResponse });
   };
 
-  public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public forgetPassword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public resetPassword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public sendConfirmationEmail = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public confirmEmail = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public logout = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       res.clearCookie('Authorization');
       res.status(200).send();

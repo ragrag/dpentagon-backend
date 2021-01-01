@@ -13,6 +13,8 @@ import dbConnection from './db/connection';
 import Routes from './common/interfaces/routes.interface';
 import errorMiddleware from './api/middlewares/error.middleware';
 import { logger, stream } from './common/utils/logger';
+import Container from 'typedi';
+import EmailService from './services/mail.service';
 
 class App {
   public app: express.Application;
@@ -30,6 +32,7 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
     this.initializeSwagger();
+    this.initiaizeServices();
     this.initializeErrorHandling();
   }
   public listen() {
@@ -73,6 +76,10 @@ class App {
     routes.forEach(route => {
       this.app.use('/api/v1/', route.router);
     });
+  }
+
+  public initiaizeServices() {
+    Container.get(EmailService);
   }
 
   private initializeSwagger() {

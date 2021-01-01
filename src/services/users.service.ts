@@ -1,15 +1,12 @@
-import bcrypt from 'bcrypt';
-import { CreateUserDTO, UpdateUserDTO, UpdateUserPasswordDTO } from '../common/dtos';
 import * as Boom from '@hapi/boom';
-import eventEmitter from '../common/utils/eventEmitter';
-import { User } from '../entities/users.entity';
+import bcrypt from 'bcrypt';
+import * as _ from 'lodash';
+import { UpdateUserDTO, UpdateUserPasswordDTO } from '../common/dtos';
 import { isEmpty } from '../common/utils/util';
+import { Profession } from '../entities/profession.entity';
+import { User } from '../entities/users.entity';
 
 class UserService {
-  private Events = {
-    USER_CREATED: 'UserCreated',
-  };
-
   public async findAllUser(): Promise<User[]> {
     const users: User[] = await User.find();
     return users;
@@ -28,15 +25,19 @@ class UserService {
     const findUser: User = await User.findOne({ where: { id: userId } });
     if (!findUser) throw Boom.notFound();
 
+    const profession = await Profession.findOne(updateUserDTO.professionId);
+    if (!profession) throw Boom.notFound("Profession doesn't exist");
+    updateUserDTO.profession = profession;
+    updateUserDTO = _.omit(updateUserDTO, ['professionId']);
     await User.update(userId, { ...updateUserDTO });
   }
 
   public async updateUserPassword(userId: number, updateUserPasswordDTO: UpdateUserPasswordDTO): Promise<void> {
-    const findUser: User = await User.findOne({ where: { id: userId } });
-    if (!findUser) throw Boom.notFound();
+    const user: User = await User.findOne({ where: { id: userId }, select: ['id', 'password'] });
+    if (!user) throw Boom.notFound();
 
-    const isPasswordMatching: boolean = await bcrypt.compare(updateUserPasswordDTO.oldPassword, findUser.password);
-    if (!isPasswordMatching) throw Boom.unauthorized('Incorrect old password');
+    const isPasswordMatching: boolean = await bcrypt.compare(updateUserPasswordDTO.oldPassword, user.password);
+    if (!isPasswordMatching) throw Boom.badRequest('Incorrect old password');
     const hashedPassword = await bcrypt.hash(updateUserPasswordDTO.newPassword, 10);
     await User.update(userId, { password: hashedPassword });
   }

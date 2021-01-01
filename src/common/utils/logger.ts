@@ -36,6 +36,7 @@ const logger = winston.createLogger({
       maxFiles: 30, // 30 Days saved
       json: false,
       zippedArchive: true,
+      silent: process.argv.indexOf('--silent') >= 0,
     }),
     // error log setting
     new winstonDaily({
@@ -45,8 +46,10 @@ const logger = winston.createLogger({
       filename: `%DATE%.error.log`,
       maxFiles: 30, // 30 Days saved
       handleExceptions: true,
+
       json: false,
       zippedArchive: true,
+      silent: process.argv.indexOf('--silent') >= 0,
     }),
   ],
 });
@@ -54,6 +57,7 @@ const logger = winston.createLogger({
 logger.add(
   new winston.transports.Console({
     format: winston.format.combine(winston.format.splat(), winston.format.colorize(), winston.format.simple()),
+    silent: process.argv.indexOf('--silent') >= 0,
   }),
 );
 

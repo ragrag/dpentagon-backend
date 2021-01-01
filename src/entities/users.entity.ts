@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { IsPhoneNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
@@ -25,7 +26,11 @@ export class User extends BaseEntity {
   @Column({ nullable: false })
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ default: false })
+  emailConfirmed: boolean;
+
+  @Column({ nullable: false, select: false })
+  // @Exclude()
   password: string;
 
   @Column({ type: 'enum', enum: ['company', 'personal'], nullable: false })
@@ -43,7 +48,7 @@ export class User extends BaseEntity {
   @Column({ nullable: false })
   displayName: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: '' })
   profileInfo: string;
 
   @Column({ nullable: true })

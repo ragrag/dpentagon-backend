@@ -3,6 +3,8 @@ tags:
   description: Authentication
 - name: User
   description: User
+- name: Post
+  description: Post
 
 host: http://localhost:3005
 basePath: /api/v1
@@ -12,7 +14,7 @@ schemes:
 
 paths:
 # [POST] /api/v1/signup
-  /api/v1/register:
+  /api/v1/auth/register:
     post:
       tags:
       - Authentication
@@ -66,7 +68,7 @@ paths:
         409:
           description: 'Conflict'
 
-  /api/v1/login:
+  /api/v1/auth/login:
     post:
       tags:
       - Authentication
@@ -93,7 +95,7 @@ paths:
                     description: user password
       responses:
         200:
-          description: 'Created'
+          description: 'OK'
           content:
             application/json:
               schema:
@@ -102,6 +104,103 @@ paths:
           description: 'Bad Request'
         401:
           description: 'Not Found'
+        404:
+          description: 'Not Found'
+
+
+
+  /api/v1/auth/password/forget:
+    post:
+      tags:
+      - Authentication
+      summary: Forget User Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: user email
+                  example: "youssefelzanaty@gmail.com"
+      responses:
+        200:
+          description: 'Ok'
+        400:
+          description: 'Bad Request'
+        404:
+          description: 'Not Found'
+  /api/v1/auth/password/reset:
+    post:
+      tags:
+      - Authentication
+      summary: Reset Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: user password
+                  example: "a11y23q"
+                token:
+                  type: string
+                  description: password reset token
+                  example: "eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0"
+      responses:
+        200:
+          description: 'Ok'
+        400:
+          description: 'Bad Request'
+        404:
+          description: 'Not Found'
+
+  /api/v1/auth/email/confirmation/send:
+    post:
+      tags:
+      - Authentication
+      summary: Send Email Confirmation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: user email
+                  example: "youssefelzanaty@gmail.com"               
+      responses:
+        200:
+          description: 'Ok'
+        400:
+          description: 'Bad Request'
+        404:
+          description: 'Not Found'
+
+  /api/v1/auth/email/confirm:
+    post:
+      tags:
+      - Authentication
+      summary: Confirm Email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: email confirmation token
+                  example: "eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0"
+      responses:
+        200:
+          description: 'Ok'
+        400:
+          description: 'Bad Request'
         404:
           description: 'Not Found'
 
@@ -136,6 +235,7 @@ paths:
 
 
 
+
   /api/v1/users:
     put:
       tags:
@@ -153,6 +253,7 @@ paths:
                   type: number
                   description: profession id
                   example: 1
+              
                 displayName:
                   type: string
                   description: display name
@@ -165,6 +266,13 @@ paths:
                   type: string
                   description: phone number
                   example: "+201001042218"
+                  required: false
+                profileInfo:
+                  type: string
+                  description: Profile Info
+                  example: "I like art"
+                  required: false
+                                    
       responses:
         200:
           description: 'Ok'
@@ -172,6 +280,73 @@ paths:
           description: 'Bad Request'
         404:
           description: 'Not Found'
+
+
+  /api/v1/posts/photo:
+    post:
+      tags:
+      - Post
+      summary: Create Photo Post
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+                  description: caption for the post
+                  required: false
+                  example: my new drawing
+                content:
+                  type: string
+                  format: base64
+                  description: base64 image
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+      responses:
+        201:
+          description: 'CREATED'
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Post'
+        400:
+          description: 'Bad Request'
+        401:
+          description: 'Not Found'
+        404:
+          description: 'Not Found'
+
+  /api/v1/posts/{id}:
+    get:
+      tags:
+      - Post
+      summary: Get post by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: id of the post to get
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Post'
+        400:
+          description: 'Bad Request'
+        401:
+          description: 'Not Found'
+        404:
+          description: 'Not Found'
+
 
 securitySchemes:
   bearerAuth:            # arbitrary name for the security scheme
@@ -188,12 +363,19 @@ components:
         email:
           type: string
           description: user email
+          example: "youssefelzanaty@gmail.com"
+        emailConfirmed:
+          type: boolean
+          description: user email activated
+          example: true
         profileInfo:
           type: string
-          description: user profile info
+          description: user profile info\
+          example: "I like drawing"
         userType:
           type: string
           description: user type
+          example: "personal"
         profession:
           type: object
           description: user profession
@@ -201,18 +383,23 @@ components:
             id: 
               type: number
               description: profession id
+              example: 1
             name:
               type: string
               description: profession name
+              example: "Graphic Design"
         displayName:
           type: string
           description: display name
+          example: "Youssef ElZanaty"
         country:
           type: string
           description: country
+          example: "Egypt"
         phoneNumber:
           type: string
           description: phone number
+          example: "+201001042218"
 
     UserWithToken:
       allOf:     
@@ -221,6 +408,49 @@ components:
           properties:
             token:
               type: string
+    Post:
+      type: object
+      properties:
+        id:
+          type: number
+          description: post id
+          example: 6
+        caption:
+          type: string
+          description: post caption
+          example: "my new drawing"
+        postType:
+          type: string
+          description: post type
+          example: "photo"
+        url:
+          type: string
+          description: post content url
+          example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+        profession:
+          type: object
+          description: post profession
+          properties:
+            id: 
+              type: number
+              description: profession id
+              example: 1
+            name:
+              type: string
+              description: profession name
+              example: "Graphic Design"
+        user:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date
+          description: post creation date
+          example: "2020-09-12"
+        updatedAt:
+          type: string
+          format: date
+          description: post updated date
+          example: "2020-09-12"
 
 
             

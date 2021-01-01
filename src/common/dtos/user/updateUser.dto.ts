@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { Profession } from '../../../entities/profession.entity';
 
 export class UpdateUserDTO {
   // @IsNotEmpty()
@@ -15,6 +16,8 @@ export class UpdateUserDTO {
   @Expose()
   public professionId: number;
 
+  public profession: Profession;
+
   @IsNotEmpty()
   @IsString()
   @Expose()
@@ -27,6 +30,12 @@ export class UpdateUserDTO {
 
   @IsNotEmpty()
   @IsPhoneNumber(null)
+  @IsOptional()
   @Expose()
   public phoneNumber: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  @Expose()
+  public profileInfo: string;
 }

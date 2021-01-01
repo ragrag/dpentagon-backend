@@ -17,6 +17,7 @@ const validateEnv = () => {
     GCS_PROJECT_ID: str(),
     GCS_PRIVATE_KEY: str(),
     GCS_CLIENT_EMAIL: str(),
+    MAILGUN_KEY: str(),
   });
 };
 

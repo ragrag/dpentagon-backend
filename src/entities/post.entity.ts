@@ -1,6 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Profession } from './profession.entity';
 import { User } from './users.entity';
+
 @Entity('post')
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -19,7 +20,7 @@ export class Post extends BaseEntity {
   postType: string;
 
   @Index()
-  @Column()
+  @Column({ nullable: true })
   caption: string;
 
   @Column()

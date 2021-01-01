@@ -45,9 +45,9 @@ class UsersController {
   public updateUserPassoword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.user.id);
-      const { oldPassword, newPassword }: UpdateUserPasswordDTO = req.body;
 
-      const updateUserPasswordDTO: UpdateUserPasswordDTO = { oldPassword, newPassword };
+      const updateUserPasswordDTO: UpdateUserPasswordDTO = plainToClass(UpdateUserPasswordDTO, req.body, { excludeExtraneousValues: true });
+
       await this.userService.updateUserPassword(userId, updateUserPasswordDTO);
 
       res.status(200).json();

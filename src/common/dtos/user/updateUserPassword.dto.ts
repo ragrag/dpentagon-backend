@@ -1,11 +1,15 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IsString, IsNotEmpty, MinLength } from 'class-validator';
 
 export class UpdateUserPasswordDTO {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
+  @Expose()
   oldPassword: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
+  @MinLength(6)
+  @Expose()
   newPassword: string;
 }

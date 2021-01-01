@@ -11,6 +11,16 @@ class PostsController {
     try {
       const postDTO: CreatePhotoPostDTO = plainToClass(CreatePhotoPostDTO, req.body, { excludeExtraneousValues: true });
       const post = await this.postService.createPhotoPost(req.user, postDTO);
+      res.status(201).json({ ...post });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getPostById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const postId = Number(req.params.id);
+      const post = await this.postService.findPostById(postId);
       res.status(200).json({ ...post });
     } catch (error) {
       next(error);

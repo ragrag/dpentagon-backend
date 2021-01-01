@@ -1,3 +1,8 @@
 import { EventEmitter } from 'events';
 
-export default new EventEmitter();
+enum Events {
+  USER_REGISTRATION = 'UserRegistered',
+}
+const eventEmitter = new EventEmitter();
+
+export { eventEmitter, Events };

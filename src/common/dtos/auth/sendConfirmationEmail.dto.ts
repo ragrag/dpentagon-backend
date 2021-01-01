@@ -1,11 +1,10 @@
+import { Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginUserDTO {
+export class SendConfirmationEmailDTO {
   @IsNotEmpty()
-  @IsEmail()
-  public email: string;
-
   @IsString()
-  @IsNotEmpty()
-  public password: string;
+  @IsEmail()
+  @Expose()
+  public email: string;
 }
