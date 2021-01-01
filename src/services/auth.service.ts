@@ -25,16 +25,16 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: LoginUserDTO): Promise<{ token: string; findUser: User }> {
-    const findUser: User = await User.findOne({ where: { email: userData.email } });
-    if (!findUser) throw Boom.notFound();
+  public async login(userData: LoginUserDTO): Promise<{ token: string; user: User }> {
+    const user: User = await User.findOne({ where: { email: userData.email } });
+    if (!user) throw Boom.notFound();
 
-    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password);
+    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, user.password);
     if (!isPasswordMatching) throw Boom.unauthorized();
 
-    const { token } = this.createToken(findUser);
+    const { token } = this.createToken(user);
 
-    return { token, findUser };
+    return { token, user };
   }
 
   public createToken(user: User): TokenData {

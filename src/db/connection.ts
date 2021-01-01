@@ -22,10 +22,10 @@ const dbConnection: ConnectionOptions = {
     subscribersDir: 'src/db/subscribers',
   },
   // migrationsRun: true,
-  ssl: true,
+  ssl: env === 'production',
   extra: {
-    rejectUnauthorized: false,
-    ssl: true,
+    rejectUnauthorized: !(env === 'production'),
+    ssl: env === 'production',
   },
   // dropSchema: true,
 };

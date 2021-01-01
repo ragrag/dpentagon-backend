@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from './post.entity';
 
-@Entity('Profession')
+@Entity('profession')
 export class Profession extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

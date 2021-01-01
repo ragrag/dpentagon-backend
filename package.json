@@ -9,7 +9,7 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "postinstall": "npm run build",
     "build": "tsc",
-    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles",
+    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles --verbose",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
     "typeorm": "cross-env NODE_ENV=migration ts-node  ./node_modules/typeorm/cli.js --config src/db/connection.ts",

@@ -12,18 +12,8 @@ class AuthController {
   public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDTO = plainToClass(CreateUserDTO, req.body, { excludeExtraneousValues: true });
-      const signUpUserData: User = await this.authService.register(userData);
-
-      res.status(201).json({ id: signUpUserData.id });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userData: LoginUserDTO = plainToClass(LoginUserDTO, req.body);
-      const { token, findUser } = await this.authService.login(userData);
+      const user: User = await this.authService.register(userData);
+      const token = this.authService.createToken(user);
 
       res.cookie('Authorization', token, {
         httpOnly: true,
@@ -32,7 +22,27 @@ class AuthController {
         secure: true,
       });
 
-      const userResponse = _.omit(findUser, ['password']);
+      const userResponse = _.omit(user, ['password']);
+
+      res.status(201).json({ ...userResponse, token });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userData: LoginUserDTO = plainToClass(LoginUserDTO, req.body);
+      const { token, user } = await this.authService.login(userData);
+
+      res.cookie('Authorization', token, {
+        httpOnly: true,
+        signed: true,
+        sameSite: 'strict',
+        secure: true,
+      });
+
+      const userResponse = _.omit(user, ['password']);
 
       res.status(200).json({ ...userResponse, token });
     } catch (error) {

@@ -1,7 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Profession } from './profession.entity';
 import { User } from './users.entity';
-
 @Entity('post')
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()

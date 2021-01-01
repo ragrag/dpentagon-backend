@@ -2,13 +2,13 @@ import { createConnection, getConnection } from 'typeorm';
 import dbConnection from '../../db/connection';
 
 export const db = {
-  async create() {
-    await createConnection(dbConnection);
-  },
+  // async create() {
+  //   await createConnection(dbConnection);
+  // },
 
-  async close() {
-    await getConnection().close();
-  },
+  // async close() {
+  //   await getConnection().close();
+  // },
 
   async clear() {
     const connection = getConnection();
