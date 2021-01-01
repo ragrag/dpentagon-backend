@@ -194,6 +194,29 @@ describe('Update Password', () => {
   });
 });
 
+describe('Get Password', () => {
+  describe('[GET] /api/v1/user', () => {
+    it('Successful get user 200', async done => {
+      const { id, token } = await registerUserAndGetToken();
+
+      const response = await request(app.getServer()).get(`/api/v1/user`).set('Authorization', token.token).send({});
+
+      expect(response.status).toBe(200);
+
+      done();
+    });
+    it('Failed get user unauthorized 401', async done => {
+      const { id, token } = await registerUserAndGetToken();
+
+      const response = await request(app.getServer()).get(`/api/v1/user`);
+
+      expect(response.status).toBe(401);
+
+      done();
+    });
+  });
+});
+
 const registerUserAndGetToken = async () => {
   const email = 'youssefelzanaty@gmail.com';
   const password = 'a11y23q';
