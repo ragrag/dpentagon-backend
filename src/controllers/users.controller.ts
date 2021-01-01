@@ -11,8 +11,7 @@ class UsersController {
 
   public getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userResponse = _.omit(req.user, ['password']);
-      res.status(200).json({ ...userResponse });
+      res.status(200).json({ ...req.user });
     } catch (error) {
       next(error);
     }
