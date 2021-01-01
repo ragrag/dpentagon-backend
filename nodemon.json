@@ -10,7 +10,6 @@
         "src/**/*.spec.ts",
         "src/**/*.test.ts"
     ],
-    
     "execMap": { 
         "ts": "node --require ts-node/register/transpile-only"
       }

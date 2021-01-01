@@ -1,9 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import './passport';
 
 export default function authenticateWithJwtCookie(req: Request, res: Response, next: NextFunction) {
-  const x = 2;
   passport.authenticate('jwt-cookiecombo', { session: false }, (err, user, info) => {
     if (err) return next(err);
 

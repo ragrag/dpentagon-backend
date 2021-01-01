@@ -14,7 +14,7 @@ services:
   server:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: server
     ports:
       - "3000:3000"
@@ -24,21 +24,7 @@ services:
     restart: "unless-stopped"
     networks:
       - backend
-    links:
-      - pg
-    depends_on:
-      - pg
-  pg:
-    image: bitnami/postgresql:11-debian-9
-    container_name: pg
-    environment:
-      POSTGRESQL_USERNAME: test
-      POSTGRESQL_PASSWORD: test
-      POSTGRESQL_DATABASE: test
-    ports:
-      - "5432:5432"
-    networks:
-      - backend
+  
 
 networks:
   backend:
