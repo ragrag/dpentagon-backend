@@ -9,11 +9,13 @@ import { CreatePhotoPostDTO } from '../../common/dtos/post/createPhotoPost.dto';
 import { ObjectIdDTO } from '../../common/dtos/common/objectId.dto';
 import { PaginationDTO } from '../../common/dtos/common/pagination.dto';
 import setPagination from '../../api/middlewares/setPagination.middleware';
+import CataloguesController from '../../controllers/catalogue.controller';
+import { CreateCatalogueDTO } from '../../common/dtos/catalogue/createCatalogue.dto';
 
-class PostsRoute implements Route {
-  public path = '/posts';
+class CataloguesRoute implements Route {
+  public path = '/catalogues';
   public router = Router();
-  public postController = new PostsController();
+  public catalogueController = new CataloguesController();
 
   constructor() {
     this.initializeRoutes();
@@ -21,15 +23,11 @@ class PostsRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(
-      `${this.path}/photo`,
-      [jwtAuthMiddeware, validationMiddleware(CreatePhotoPostDTO, 'body', false)],
-      this.postController.createPhotoPost,
+      `${this.path}`,
+      [jwtAuthMiddeware, validationMiddleware(CreateCatalogueDTO, 'body', false)],
+      this.catalogueController.createCatalogue,
     );
-
-    this.router.get(`${this.path}/:id`, [validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getPostById);
-    this.router.get(`/users/:id/posts`, [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getUserPostsById);
-    // this.router.delete(`${this.path}/:id`, [jwtAuthMiddeware], this.postController.deletePostById);
   }
 }
 
-export default PostsRoute;
+export default CataloguesRoute;

@@ -398,6 +398,8 @@ paths:
                                 type: string
                                 description: profession name
                                 example: "Graphic Design"
+                          catalogue:
+                            $ref: '#/components/schemas/Catalogue'
                           createdAt:
                             type: string
                             format: date
@@ -408,6 +410,7 @@ paths:
                             format: date
                             description: post updated date
                             example: "2020-09-12"
+                          
                   hasMore:
                     type: boolean          
                     example: true
@@ -558,6 +561,21 @@ components:
           properties:
             token:
               type: string
+
+    Catalogue:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: catalogue id
+          example: 1
+        name:
+          type: string
+          description: catalogue name
+          example: "Furniture"  
+        user:
+          $ref: '#/components/schemas/User'
+
     Post:
       type: object
       properties:
@@ -589,8 +607,8 @@ components:
               type: string
               description: profession name
               example: "Graphic Design"
-        user:
-          $ref: '#/components/schemas/User'
+        catalogue:
+          $ref: '#/components/schemas/Catalogue'
         createdAt:
           type: string
           format: date

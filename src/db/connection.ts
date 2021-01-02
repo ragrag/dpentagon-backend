@@ -12,7 +12,7 @@ const dbConnection: ConnectionOptions = {
   url: dbConnectionUrls[env],
   type: 'postgres',
   synchronize: env === 'production' ? false : true,
-  logging: true,
+  logging: false,
   entities: [env === 'production' ? 'build/entities/*.js' : 'src/entities/*{.ts,.js}'],
   migrations: [env === 'production' ? 'build/db/migrations/*.js' : 'src/db/migrations/*{.ts,.js}'],
   subscribers: [env === 'production' ? 'build/db/subscribers/*.js' : 'src/db/subscribers/*{.ts,.js}'],
