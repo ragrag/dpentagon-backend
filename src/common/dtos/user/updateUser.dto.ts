@@ -37,5 +37,10 @@ export class UpdateUserDTO {
   @IsNotEmpty()
   @IsOptional()
   @Expose()
+  public address: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  @Expose()
   public profileInfo: string;
 }

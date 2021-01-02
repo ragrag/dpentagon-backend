@@ -114,9 +114,7 @@ describe('Get Post By Id', () => {
 
     it('Invlid post id 400', async done => {
       const response = await request(app.getServer()).get(`/api/v1/posts/s`);
-
       expect(response.status).toBe(400);
-
       done();
     });
   });

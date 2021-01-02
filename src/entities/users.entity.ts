@@ -60,11 +60,17 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   photo: string;
 
+  @Column({ nullable: true })
+  coverPhoto: string;
+
   @OneToMany(() => Post, post => post.user)
   posts: Post[];
 
   @Column({ nullable: true })
   phoneNumber: string;
+
+  @Column({ nullable: true })
+  address: string;
 
   @Column({ nullable: true, default: false })
   verified: boolean;

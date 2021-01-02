@@ -298,7 +298,6 @@ paths:
                   type: number
                   description: profession id
                   example: 1
-              
                 displayName:
                   type: string
                   description: display name
@@ -311,6 +310,11 @@ paths:
                   type: string
                   description: phone number
                   example: "+201001042218"
+                  required: false
+                address:
+                  type: string
+                  description: address
+                  example: "124 Baker St"
                   required: false
                 profileInfo:
                   type: string
@@ -532,6 +536,20 @@ components:
           type: string
           description: phone number
           example: "+201001042218"
+        photo:
+          type: string
+          format: base64
+          description: user photo
+          example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+        coverPhoto:
+          type: string
+          format: base64
+          description: User cover photo
+          example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+        address:
+          type: string
+          description: User address
+          example: "124 Baker St"
 
     UserWithToken:
       allOf:     
