@@ -87,7 +87,7 @@ class App {
       swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-          title: 'User Service',
+          title: 'Dpentagon',
           version: '1.0.0',
           description: 'API Documentation',
         },
