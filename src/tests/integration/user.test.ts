@@ -217,6 +217,30 @@ describe('Get Password', () => {
   });
 });
 
+describe('Get User By Id', () => {
+  describe('[GET] /api/v1/user', () => {
+    it('Successful get user 200', async done => {
+      const { id, token } = await registerUserAndGetToken();
+
+      const response = await request(app.getServer()).get(`/api/v1/users/${id}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(id);
+
+      done();
+    });
+    it('Failed to get user not found 404', async done => {
+      const id = 99;
+
+      const response = await request(app.getServer()).get(`/api/v1/users/${id}`);
+
+      expect(response.status).toBe(404);
+
+      done();
+    });
+  });
+});
+
 const registerUserAndGetToken = async () => {
   const email = 'youssefelzanaty@gmail.com';
   const password = 'a11y23q';

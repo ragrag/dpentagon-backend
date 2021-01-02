@@ -7,6 +7,8 @@ import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
 import { CreatePhotoPostDTO } from '../../common/dtos/post/createPhotoPost.dto';
 import { ObjectIdDTO } from '../../common/dtos/common/objectId.dto';
+import { PaginationDTO } from '../../common/dtos/common/pagination.dto';
+import setPagination from '../../api/middlewares/setPagination.middleware';
 
 class PostsRoute implements Route {
   public path = '/posts';
@@ -26,6 +28,7 @@ class PostsRoute implements Route {
     // this.router.post(`${this.path}/video`, this.postController.createVideoPost);
     // this.router.get(`${this.path}`, this.postController.getPosts);
     this.router.get(`${this.path}/:id`, [validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getPostById);
+    this.router.get(`/users/:id/posts`, [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getUserPostsById);
     // this.router.delete(`${this.path}/:id`, [jwtAuthMiddeware], this.postController.deletePostById);
   }
 }

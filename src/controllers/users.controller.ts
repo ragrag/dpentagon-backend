@@ -20,9 +20,9 @@ class UsersController {
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
-      const findOneUserData: User = await this.userService.findUserById(userId);
+      const user: User = await this.userService.findUserById(userId);
 
-      res.status(200).json({ data: findOneUserData, message: 'findOne' });
+      res.status(200).json({ ...user });
     } catch (error) {
       next(error);
     }

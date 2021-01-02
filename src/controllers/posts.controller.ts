@@ -26,6 +26,19 @@ class PostsController {
       next(error);
     }
   };
+
+  public getUserPostsById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = Number(req.params.id);
+      const { posts, hasMore } = await this.postService.findUserPostsById(userId, {
+        page: req.query.page,
+        limit: req.query.limit,
+      });
+      res.status(200).json({ posts, hasMore });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default PostsController;

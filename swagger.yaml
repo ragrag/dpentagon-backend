@@ -103,7 +103,7 @@ paths:
         400:
           description: 'Bad Request'
         401:
-          description: 'Not Found'
+          description: 'Unauthorized'
         404:
           description: 'Not Found'
 
@@ -222,10 +222,32 @@ paths:
         400:
           description: 'Bad Request'
         401:
-          description: 'Not Found'
+          description: 'Unauthorized'
         404:
           description: 'Not Found'
 
+
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - User
+      summary: Get user by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: user id
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/User'
+        404:
+          description: 'Not Found'
 
   /api/v1/users/password:
     put:
@@ -252,7 +274,7 @@ paths:
         400:
           description: 'Bad Request'
         401:
-          description: 'Not Found'
+          description: 'Unauthorized'
         404:
           description: 'Not Found'
 
@@ -302,6 +324,94 @@ paths:
         400:
           description: 'Bad Request'
         404:
+          description: 'Not Fou nd'
+
+  /api/v1/users/{id}/posts:
+    get:
+      tags:
+      - Post
+      summary: Get users posts by his id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: user id
+        - in: query
+          name: page
+          schema:
+            type: integer
+          default: 1
+          minValue: 1
+          description: The number of the current page (skips page*limit)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          default: 20
+          minValue: 1
+          maxValue: 50
+          description: The numbers of items to return
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                          id:
+                            type: number
+                            description: post id
+                            example: 6
+                          caption:
+                            type: string
+                            description: post caption
+                            example: "my new drawing"
+                          postType:
+                            type: string
+                            description: post type
+                            example: "photo"
+                          url:
+                            type: string
+                            description: post content url
+                            example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+                          profession:
+                            type: object
+                            description: post profession
+                            properties:
+                              id: 
+                                type: number
+                                description: profession id
+                                example: 1
+                              name:
+                                type: string
+                                description: profession name
+                                example: "Graphic Design"
+                          createdAt:
+                            type: string
+                            format: date
+                            description: post creation date
+                            example: "2020-09-12"
+                          updatedAt:
+                            type: string
+                            format: date
+                            description: post updated date
+                            example: "2020-09-12"
+                  hasMore:
+                    type: boolean          
+                    example: true
+        400:
+          description: 'Bad Request'
+        401:
+          description: 'Unauthorized'
+        404:
           description: 'Not Found'
 
 
@@ -338,7 +448,7 @@ paths:
         400:
           description: 'Bad Request'
         401:
-          description: 'Not Found'
+          description: 'Unauthorized'
         404:
           description: 'Not Found'
 
@@ -353,9 +463,7 @@ paths:
           schema:
             type: integer
           required: true
-          description: id of the post to get
-      security:
-        - bearerAuth: []
+          description: post id
       responses:
         200:
           description: 'OK'
@@ -366,9 +474,10 @@ paths:
         400:
           description: 'Bad Request'
         401:
-          description: 'Not Found'
+          description: 'Unauthorized'
         404:
           description: 'Not Found'
+
 
 
 securitySchemes:
