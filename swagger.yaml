@@ -445,6 +445,10 @@ paths:
                   format: base64
                   description: base64 image
                   example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                catalogueId:
+                  type: number
+                  description: catalogue id
+                  example: 1
       responses:
         201:
           description: 'CREATED'
