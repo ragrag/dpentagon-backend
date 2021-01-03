@@ -49,6 +49,17 @@ paths:
                   type: string
                   description: display name
                   example: Youssef ElZanaty
+                photo:
+                  type: string
+                  format: base64
+                  description: user photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                coverPhoto:
+                  type: string
+                  format: base64
+                  description: user cover photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                  
                 country:
                   type: string
                   description: country
@@ -306,6 +317,16 @@ paths:
                   type: string
                   description: display name
                   example: Youssef ElZanaty
+                photo:
+                  type: string
+                  format: base64
+                  description: user photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                coverPhoto:
+                  type: string
+                  format: base64
+                  description: user cover photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
                 country:
                   type: string
                   description: country
@@ -426,6 +447,107 @@ paths:
           description: 'Not Found'
 
 
+  /api/v1/posts:
+    get:
+      tags:
+      - Post
+      summary: Get posts
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          default: 1
+          minValue: 1
+          description: The number of the current page (skips page*limit)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          default: 20
+          minValue: 1
+          maxValue: 50
+          description: The numbers of items to return
+        - in: query
+          name: profession
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific profession
+          example: "Graphic Design"
+        - in: query
+          name: country
+          schema:
+            type: string
+          default: ''
+          description: find posts from a specific country
+          example: "Egypt"
+        - in: query
+          name: caption
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific caption
+          example: "vector art"
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                          id:
+                            type: number
+                            description: post id
+                            example: 6
+                          caption:
+                            type: string
+                            description: post caption
+                            example: "my new drawing"
+                          postType:
+                            type: string
+                            description: post type
+                            example: "photo"
+                          url:
+                            type: string
+                            description: post content url
+                            example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+                          profession:
+                            type: object
+                            description: post profession
+                            properties:
+                              id: 
+                                type: number
+                                description: profession id
+                                example: 1
+                              name:
+                                type: string
+                                description: profession name
+                                example: "Graphic Design"
+                          catalogue:
+                            $ref: '#/components/schemas/Catalogue'
+                          createdAt:
+                            type: string
+                            format: date
+                            description: post creation date
+                            example: "2020-09-12"
+                          updatedAt:
+                            type: string
+                            format: date
+                            description: post updated date
+                            example: "2020-09-12"
+                          
+                  hasMore:
+                    type: boolean          
+                    example: true
+        400:
+          description: 'Bad Request'
 
 
 

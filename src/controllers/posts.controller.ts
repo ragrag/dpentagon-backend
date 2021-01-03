@@ -17,6 +17,18 @@ class PostsController {
     }
   };
 
+  public getPosts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { posts, hasMore } = await this.postService.findPosts(req.query as any, {
+        page: req.query.page,
+        limit: req.query.limit,
+      });
+      res.status(200).json({ posts, hasMore });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getPostById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const postId = Number(req.params.id);

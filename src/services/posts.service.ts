@@ -2,6 +2,7 @@ import * as Boom from '@hapi/boom';
 import { Container } from 'typedi';
 import { v4 as uuid } from 'uuid';
 import { CreatePhotoPostDTO } from '../common/dtos/post/createPhotoPost.dto';
+import { GetPostsDTO } from '../common/dtos/post/getPosts.dto';
 import { Catalogue } from '../entities/catalogue.entity';
 import { Post } from '../entities/post.entity';
 import { User } from '../entities/users.entity';
@@ -23,6 +24,27 @@ class PostService {
     } as Post);
 
     return post;
+  }
+
+  public async findPosts(queryParams: GetPostsDTO, { page, limit }): Promise<{ posts: Post[]; hasMore: boolean }> {
+    const query = Post.createQueryBuilder('post')
+      .leftJoinAndSelect('post.catalogue', 'catalogue')
+      .leftJoinAndSelect('catalogue.user', 'user')
+      .leftJoinAndSelect('post.profession', 'profession');
+
+    if (queryParams.profession) query.where('LOWER(profession.name) = :professionName', { professionName: queryParams.profession.toLowerCase() });
+    if (queryParams.country) query.andWhere('LOWER(user.country) = :country', { country: queryParams.country.toLowerCase() });
+    if (queryParams.caption) query.andWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
+
+    let posts = await query
+      .orderBy('post.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .limit(limit + 1)
+      .getMany();
+
+    const hasMore = posts.length > limit;
+    if (hasMore) posts = posts.slice(0, limit);
+    return { posts, hasMore };
   }
 
   public async findPostById(id: number): Promise<Post> {

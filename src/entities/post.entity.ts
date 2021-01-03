@@ -11,6 +11,7 @@ export class Post extends BaseEntity {
   // @ManyToOne(() => User, user => user.posts, { eager: true, nullable: false })
   // user: User;
 
+  @Index()
   @ManyToOne(() => Profession, profession => profession.posts, { eager: true, nullable: false })
   profession: Profession;
 

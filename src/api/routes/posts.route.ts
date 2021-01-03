@@ -9,6 +9,7 @@ import { CreatePhotoPostDTO } from '../../common/dtos/post/createPhotoPost.dto';
 import { ObjectIdDTO } from '../../common/dtos/common/objectId.dto';
 import { PaginationDTO } from '../../common/dtos/common/pagination.dto';
 import setPagination from '../../api/middlewares/setPagination.middleware';
+import { GetPostsDTO } from '../../common/dtos/post/getPosts.dto';
 
 class PostsRoute implements Route {
   public path = '/posts';
@@ -20,6 +21,8 @@ class PostsRoute implements Route {
   }
 
   private initializeRoutes() {
+    this.router.get(`${this.path}`, [setPagination, validationMiddleware(GetPostsDTO, 'query', true)], this.postController.getPosts);
+
     this.router.post(
       `${this.path}/photo`,
       [jwtAuthMiddeware, validationMiddleware(CreatePhotoPostDTO, 'body', false)],
