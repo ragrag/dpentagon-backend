@@ -24,7 +24,7 @@ export class Post extends BaseEntity {
   @Column({ nullable: true })
   caption: string;
 
-  @ManyToOne(() => Catalogue, catalogue => catalogue.posts, { eager: true, nullable: false })
+  @ManyToOne(() => Catalogue, catalogue => catalogue.posts, { eager: true, nullable: false, onDelete: 'CASCADE' })
   catalogue: Catalogue;
 
   @Column()

@@ -11,6 +11,7 @@ import { PaginationDTO } from '../../common/dtos/common/pagination.dto';
 import setPagination from '../../api/middlewares/setPagination.middleware';
 import CataloguesController from '../../controllers/catalogue.controller';
 import { CreateCatalogueDTO } from '../../common/dtos/catalogue/createCatalogue.dto';
+import { UpdateCatalogueDTO } from '../../common/dtos/catalogue/updateCatalogue.dto';
 
 class CataloguesRoute implements Route {
   public path = '/catalogues';
@@ -26,6 +27,26 @@ class CataloguesRoute implements Route {
       `${this.path}`,
       [jwtAuthMiddeware, validationMiddleware(CreateCatalogueDTO, 'body', false)],
       this.catalogueController.createCatalogue,
+    );
+
+    this.router.get(
+      `/users/:id/catalogues`,
+      [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.catalogueController.getUserCatalogues,
+    );
+
+    this.router.get(`${this.path}/:id`, [validationMiddleware(ObjectIdDTO, 'params', false)], this.catalogueController.getCatalogueById);
+
+    this.router.put(
+      `${this.path}/:id`,
+      [jwtAuthMiddeware, validationMiddleware(ObjectIdDTO, 'params', false), validationMiddleware(UpdateCatalogueDTO, 'body', false)],
+      this.catalogueController.updateCatalogueById,
+    );
+
+    this.router.delete(
+      `${this.path}/:id`,
+      [jwtAuthMiddeware, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.catalogueController.deleteCatalogueById,
     );
   }
 }

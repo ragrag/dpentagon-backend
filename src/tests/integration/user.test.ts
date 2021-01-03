@@ -218,7 +218,7 @@ describe('Get Password', () => {
 });
 
 describe('Get User By Id', () => {
-  describe('[GET] /api/v1/user', () => {
+  describe('[GET] /api/v1/users/:id', () => {
     it('Successful get user 200', async done => {
       const { id, token } = await registerUserAndGetToken();
 

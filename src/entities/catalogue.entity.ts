@@ -11,7 +11,7 @@ export class Catalogue extends BaseEntity {
   @ManyToOne(() => User, user => user.catalogues, { eager: true, nullable: false })
   user: User;
 
-  @OneToMany(() => Post, post => post.catalogue, { cascade: ['remove', 'soft-remove'] })
+  @OneToMany(() => Post, post => post.catalogue)
   posts: Post[];
 
   @Column({ nullable: false })
