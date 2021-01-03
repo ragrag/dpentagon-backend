@@ -249,7 +249,7 @@ const registerUserAndGetToken = async () => {
     id: 99,
     email: email,
     password: bcrypt.hashSync(password, 10),
-    userType: 'personal',
+    userType: 'freelancer',
     profession: profession,
     displayName: 'Youssef ElZanaty',
     country: 'Egypt',
