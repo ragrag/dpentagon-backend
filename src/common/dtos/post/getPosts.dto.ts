@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 
 export class GetPostsDTO {
   @IsString()
@@ -13,4 +13,12 @@ export class GetPostsDTO {
   @IsString()
   @Expose()
   public caption: string;
+
+  @IsString()
+  @IsEnum({
+    freelancer: 'freelancer',
+    company: 'company',
+  })
+  @Expose()
+  public userType: string;
 }

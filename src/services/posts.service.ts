@@ -33,6 +33,7 @@ class PostService {
       .leftJoinAndSelect('post.profession', 'profession');
 
     if (queryParams.profession) query.where('LOWER(profession.name) = :professionName', { professionName: queryParams.profession.toLowerCase() });
+    if (queryParams.userType) query.andWhere('LOWER(user.userType) = :userType', { userType: queryParams.userType.toLowerCase() });
     if (queryParams.country) query.andWhere('LOWER(user.country) = :country', { country: queryParams.country.toLowerCase() });
     if (queryParams.caption) query.andWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
 

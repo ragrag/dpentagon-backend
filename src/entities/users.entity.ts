@@ -34,7 +34,7 @@ export class User extends BaseEntity {
   // @Exclude()
   password: string;
 
-  @Column({ type: 'enum', enum: ['company', 'personal'], nullable: false })
+  @Column({ type: 'enum', enum: ['company', 'freelancer'], nullable: false })
   userType: string;
 
   @Index()

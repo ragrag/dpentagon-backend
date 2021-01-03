@@ -40,7 +40,7 @@ paths:
                 userType:
                   type: string
                   description: user type
-                  example : personal
+                  example: freelancer
                 professionId:
                   type: number
                   description: profession id
@@ -489,6 +489,17 @@ paths:
           default: ''
           description: find posts by a specific caption
           example: "vector art"
+        - in: query
+          name: userType
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific user type
+          examples: 
+            freelancer:
+              value: 'freelancer'
+            company:
+              value: 'company'
       responses:
         200:
           description: 'OK'
@@ -900,7 +911,7 @@ components:
         userType:
           type: string
           description: user type
-          example: "personal"
+          example: "freelancer"
         profession:
           type: object
           description: user profession
