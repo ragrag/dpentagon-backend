@@ -17,6 +17,18 @@ class PostsController {
     }
   };
 
+  public getPosts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { posts, hasMore } = await this.postService.findPosts(req.query as any, {
+        page: req.query.page,
+        limit: req.query.limit,
+      });
+      res.status(200).json({ posts, hasMore });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getPostById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const postId = Number(req.params.id);
@@ -27,10 +39,33 @@ class PostsController {
     }
   };
 
+  public deletePostById = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const postId = Number(req.params.id);
+      const post = await this.postService.deletePostById(req.user, postId);
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getUserPostsById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
       const { posts, hasMore } = await this.postService.findUserPostsById(userId, {
+        page: req.query.page,
+        limit: req.query.limit,
+      });
+      res.status(200).json({ posts, hasMore });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getCataloguePostsById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const catalogueId = Number(req.params.id);
+      const { posts, hasMore } = await this.postService.findCataloguePostsById(catalogueId, {
         page: req.query.page,
         limit: req.query.limit,
       });

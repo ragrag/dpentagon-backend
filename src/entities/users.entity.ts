@@ -14,6 +14,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Catalogue } from './catalogue.entity';
 import { Post } from './post.entity';
 import { Profession } from './profession.entity';
 
@@ -33,7 +34,7 @@ export class User extends BaseEntity {
   // @Exclude()
   password: string;
 
-  @Column({ type: 'enum', enum: ['company', 'personal'], nullable: false })
+  @Column({ type: 'enum', enum: ['company', 'freelancer'], nullable: false })
   userType: string;
 
   @Index()
@@ -63,8 +64,11 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   coverPhoto: string;
 
-  @OneToMany(() => Post, post => post.user)
-  posts: Post[];
+  // @OneToMany(() => Post, post => post.user)
+  // posts: Post[];
+
+  @OneToMany(() => Catalogue, catalogue => catalogue.user)
+  catalogues: Catalogue[];
 
   @Column({ nullable: true })
   phoneNumber: string;

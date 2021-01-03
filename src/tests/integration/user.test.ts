@@ -218,7 +218,7 @@ describe('Get Password', () => {
 });
 
 describe('Get User By Id', () => {
-  describe('[GET] /api/v1/user', () => {
+  describe('[GET] /api/v1/users/:id', () => {
     it('Successful get user 200', async done => {
       const { id, token } = await registerUserAndGetToken();
 
@@ -249,7 +249,7 @@ const registerUserAndGetToken = async () => {
     id: 99,
     email: email,
     password: bcrypt.hashSync(password, 10),
-    userType: 'personal',
+    userType: 'freelancer',
     profession: profession,
     displayName: 'Youssef ElZanaty',
     country: 'Egypt',

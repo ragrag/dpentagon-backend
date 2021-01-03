@@ -9,6 +9,7 @@ import { CreatePhotoPostDTO } from '../../common/dtos/post/createPhotoPost.dto';
 import { ObjectIdDTO } from '../../common/dtos/common/objectId.dto';
 import { PaginationDTO } from '../../common/dtos/common/pagination.dto';
 import setPagination from '../../api/middlewares/setPagination.middleware';
+import { GetPostsDTO } from '../../common/dtos/post/getPosts.dto';
 
 class PostsRoute implements Route {
   public path = '/posts';
@@ -20,15 +21,26 @@ class PostsRoute implements Route {
   }
 
   private initializeRoutes() {
+    this.router.get(`${this.path}`, [setPagination, validationMiddleware(GetPostsDTO, 'query', true)], this.postController.getPosts);
+
     this.router.post(
       `${this.path}/photo`,
-      [jwtAuthMiddeware, validationMiddleware(CreatePhotoPostDTO, 'body', true)],
+      [jwtAuthMiddeware, validationMiddleware(CreatePhotoPostDTO, 'body', false)],
       this.postController.createPhotoPost,
     );
-    // this.router.post(`${this.path}/video`, this.postController.createVideoPost);
-    // this.router.get(`${this.path}`, this.postController.getPosts);
+
     this.router.get(`${this.path}/:id`, [validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getPostById);
+    this.router.delete(
+      `${this.path}/:id`,
+      [jwtAuthMiddeware, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.postController.deletePostById,
+    );
     this.router.get(`/users/:id/posts`, [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getUserPostsById);
+    this.router.get(
+      `/catalogues/:id/posts`,
+      [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.postController.getCataloguePostsById,
+    );
     // this.router.delete(`${this.path}/:id`, [jwtAuthMiddeware], this.postController.deletePostById);
   }
 }
