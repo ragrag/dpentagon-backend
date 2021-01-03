@@ -31,12 +31,34 @@ class PostService {
     return post;
   }
 
+  public async deletePostById(user: User, postId: number): Promise<void> {
+    const post: Post = await Post.findOne(postId, { relations: ['catalogue'] });
+    if (!post) throw Boom.notFound("Psost doesn't exist");
+    if (post.catalogue.user.id !== user.id) throw Boom.unauthorized("You don't own this post");
+    await Post.delete(postId);
+  }
+
   public async findUserPostsById(userId, { page, limit }): Promise<{ posts: Post[]; hasMore: boolean }> {
     let posts: Post[] = await Post.createQueryBuilder('post')
       .leftJoinAndSelect('post.catalogue', 'catalogue')
       .leftJoin('catalogue.user', 'user')
       .leftJoinAndSelect('post.profession', 'profession')
       .where('user.id = :id', { id: userId })
+      .orderBy('post.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .limit(limit + 1)
+      .getMany();
+    const hasMore = posts.length > limit;
+    if (hasMore) posts = posts.slice(0, limit);
+    return { posts, hasMore };
+  }
+
+  public async findCataloguePostsById(catalogueId, { page, limit }): Promise<{ posts: Post[]; hasMore: boolean }> {
+    let posts: Post[] = await Post.createQueryBuilder('post')
+      .leftJoinAndSelect('post.catalogue', 'catalogue')
+      .leftJoinAndSelect('catalogue.user', 'user')
+      .leftJoinAndSelect('post.profession', 'profession')
+      .where('catalogue.id = :id', { id: catalogueId })
       .orderBy('post.createdAt', 'DESC')
       .skip((page - 1) * limit)
       .limit(limit + 1)

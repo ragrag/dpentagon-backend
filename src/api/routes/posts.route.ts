@@ -27,7 +27,17 @@ class PostsRoute implements Route {
     );
 
     this.router.get(`${this.path}/:id`, [validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getPostById);
+    this.router.delete(
+      `${this.path}/:id`,
+      [jwtAuthMiddeware, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.postController.deletePostById,
+    );
     this.router.get(`/users/:id/posts`, [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)], this.postController.getUserPostsById);
+    this.router.get(
+      `/catalogues/:id/posts`,
+      [setPagination, validationMiddleware(ObjectIdDTO, 'params', false)],
+      this.postController.getCataloguePostsById,
+    );
     // this.router.delete(`${this.path}/:id`, [jwtAuthMiddeware], this.postController.deletePostById);
   }
 }
