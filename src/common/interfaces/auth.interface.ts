@@ -5,6 +5,10 @@ export interface DataStoredInToken {
   id: number;
 }
 
+export interface PasswordResetToken {
+  email: string;
+}
+
 export interface TokenData {
   token: string;
   expiresIn: any;

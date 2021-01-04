@@ -35,22 +35,24 @@ class MailGunClient implements EmailClient {
         from: 'Algomoon <no-reply@mail.algomoon.com>',
         to: receiverEmail,
         subject: 'DPentagon Password Reset',
-        template: 'password-reset',
-        'v:link': `www.dpentagon.com/password/reset/${token}`,
+        text: `www.dpentagon.com/password/reset/${token}`,
+        // template: 'password-reset',
+        // 'v:link': `www.dpentagon.com/password/reset/${token}`,
       },
       (error, body) => {
         if (error) logger.error(error);
       },
     );
   };
-  public sendEmailConfirmationLink = (receiverEmail: string, token: string) => {
+  public sendEmailConfirmation = (receiverEmail: string, token: string) => {
     this.mailer.messages().send(
       {
         from: 'Algomoon <no-reply@mail.algomoon.com>',
         to: receiverEmail,
         subject: 'DPentagon Email Confirmation',
-        template: 'email-confirmation',
-        'v:link': `www.dpentagon.com/email/confirm/${token}`,
+        text: `www.dpentagon.com/email/confirm/${token}`,
+        // template: 'email-confirmation',
+        // 'v:link': `www.dpentagon.com/email/confirm/${token}`,
       },
       (error, body) => {
         if (error) logger.error(error);

@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 
 enum Events {
   USER_REGISTRATION = 'UserRegistered',
-  PASSWORD_FORGET = 'UserPasswordForget',
-  EMAIL_CONFIRMATION_REQUEST = 'EmailConfirmationRequest',
+  PASSWORD_RESET = 'UserPasswordReset',
+  CONFIRMATION_EMAIL = 'ConfirmationEmail',
 }
 const eventEmitter = new EventEmitter();
 

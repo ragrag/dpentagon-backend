@@ -49,6 +49,7 @@ describe('User Registration', () => {
         email: email,
         password: 'a11y23q',
         userType: 'freelancer',
+        emailConfirmed: true,
         profession: profession,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -164,6 +165,7 @@ describe('User Login', () => {
       await User.save({
         email: email,
         password: bcrypt.hashSync(password, 10),
+        emailConfirmed: true,
         userType: 'freelancer',
         profession: profession,
         displayName: 'Youssef ElZanaty',
@@ -187,6 +189,7 @@ describe('User Login', () => {
       await User.save({
         email: email,
         password: bcrypt.hashSync(password, 10),
+        emailConfirmed: true,
         userType: 'freelancer',
         profession: profession,
         displayName: 'Youssef ElZanaty',

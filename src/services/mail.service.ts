@@ -7,7 +7,7 @@ import { logger } from '../common/utils/logger';
 @Service()
 class EmailService {
   constructor(private emailClient: MailGunClient) {
-    this.initializeEventListeners();
+    if (process.env.NODE_ENV !== 'testing') this.initializeEventListeners();
   }
 
   private initializeEventListeners(): void {
@@ -22,7 +22,7 @@ class EmailService {
       });
     });
 
-    eventEmitter.on(Events.PASSWORD_FORGET, ({ email, token }) => {
+    eventEmitter.on(Events.PASSWORD_RESET, ({ email, token }) => {
       setImmediate(() => {
         try {
           this.emailClient.sendPasswordResetLink(email, token);
@@ -33,10 +33,10 @@ class EmailService {
       });
     });
 
-    eventEmitter.on(Events.EMAIL_CONFIRMATION_REQUEST, ({ email, token }) => {
+    eventEmitter.on(Events.CONFIRMATION_EMAIL, ({ email, token }) => {
       setImmediate(() => {
         try {
-          this.emailClient.sendEmailConfirmationLink(email, token);
+          this.emailClient.sendEmailConfirmation(email, token);
           logger.info(`password reset link sent: ${email}`);
         } catch (err) {
           console.log(err);

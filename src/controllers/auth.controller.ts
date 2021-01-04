@@ -7,6 +7,10 @@ import AuthService from '../services/auth.service';
 import { plainToClass } from 'class-transformer';
 import { LoginUserDTO } from '../common/dtos';
 import { eventEmitter, Events } from '../common/utils/eventEmitter';
+import { ResetPasswordDTO } from '../common/dtos/auth/resetPassword.dto';
+import { ConfirmEmailDTO } from '../common/dtos/auth/confirmEmail.dto';
+import { ForgetPasswordDTO } from '../common/dtos/auth/forgetPassword.dto';
+import { SendConfirmationEmailDTO } from '../common/dtos/auth/sendConfirmationEmail.dto';
 class AuthController {
   public authService = new AuthService();
 
@@ -14,7 +18,7 @@ class AuthController {
     try {
       const userData: CreateUserDTO = plainToClass(CreateUserDTO, req.body, { excludeExtraneousValues: true });
       const user: User = await this.authService.register(userData);
-      const token = AuthService.createToken(user);
+      const token = AuthService.createAuthToken(user);
 
       res.cookie('Authorization', token, {
         httpOnly: true,
@@ -52,7 +56,7 @@ class AuthController {
   };
 
   public authenticateSocial = async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = await AuthService.createToken(req.user as User);
+    const { token } = await AuthService.createAuthToken(req.user as User);
 
     res.cookie('Authorization', token, {
       httpOnly: true,
@@ -66,7 +70,9 @@ class AuthController {
 
   public forgetPassword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      res.status(200).send();
+      const forgetPasswordDTO: ForgetPasswordDTO = plainToClass(ForgetPasswordDTO, req.body, { excludeExtraneousValues: true });
+      await this.authService.sendPasswordResetEmail(forgetPasswordDTO);
+      res.status(202).send();
     } catch (error) {
       next(error);
     }
@@ -74,6 +80,9 @@ class AuthController {
 
   public resetPassword = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const passwordResetDTO: ResetPasswordDTO = plainToClass(ResetPasswordDTO, req.body, { excludeExtraneousValues: true });
+      await this.authService.resetPassword(passwordResetDTO);
+
       res.status(200).send();
     } catch (error) {
       next(error);
@@ -82,7 +91,9 @@ class AuthController {
 
   public sendConfirmationEmail = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      res.status(200).send();
+      const confirmationEmailDTO: SendConfirmationEmailDTO = plainToClass(SendConfirmationEmailDTO, req.body, { excludeExtraneousValues: true });
+      await this.authService.sendEmailConfirmation(confirmationEmailDTO);
+      res.status(202).send();
     } catch (error) {
       next(error);
     }
@@ -90,6 +101,9 @@ class AuthController {
 
   public confirmEmail = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const confirmEmailDTO: ConfirmEmailDTO = plainToClass(ConfirmEmailDTO, req.body, { excludeExtraneousValues: true });
+      await this.authService.confirmEmail(confirmEmailDTO);
+
       res.status(200).send();
     } catch (error) {
       next(error);

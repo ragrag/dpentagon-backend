@@ -231,6 +231,7 @@ const registerUserAndGetToken = async () => {
   const user = await User.save({
     email: email,
     password: bcrypt.hashSync(password, 10),
+    emailConfirmed: true,
     userType: 'freelancer',
     profession: profession,
     displayName: 'Youssef ElZanaty',
@@ -238,6 +239,6 @@ const registerUserAndGetToken = async () => {
     phoneNumber: '+201001042218',
   } as User);
 
-  const token = AuthService.createToken(user);
+  const token = AuthService.createAuthToken(user);
   return { user, token };
 };

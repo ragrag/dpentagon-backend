@@ -11,7 +11,12 @@ export default function authenticateWithJwtCookie(req: Request, res: Response, n
       res.clearCookie('Authorization');
       return res.status(401).send('unauthorized');
     }
-    if (!user.emailConfirmed) return res.status(403).send('Email not confirmed');
+    if (!user.emailConfirmed)
+      return res.status(403).json({
+        email: user.email,
+        message: 'user email not confirmed',
+      });
+    req.user = user;
     next();
   })(req, res, next);
 }

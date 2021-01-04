@@ -36,6 +36,7 @@ jobs:
         DATABASE_URL_DEV: ${{ secrets.DATABASE_URL_DEV }}
         DATABASE_URL_TEST:  ${{ secrets.DATABASE_URL_TEST }}
         JWT_SECRET:  ${{ secrets.JWT_SECRET }}
+        JWT_RESET_SECRET: ${{ secrets.JWT_RESET_SECRET }}
         FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
         FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
         FACEBOOK_ACCESS: ${{ secrets.FACEBOOK_ACCESS }}
