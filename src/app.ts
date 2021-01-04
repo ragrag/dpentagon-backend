@@ -15,6 +15,7 @@ import errorMiddleware from './api/middlewares/error.middleware';
 import { logger, stream } from './common/utils/logger';
 import Container from 'typedi';
 import EmailService from './services/mail.service';
+import rateLimit from 'express-rate-limit';
 
 class App {
   public app: express.Application;
@@ -58,6 +59,7 @@ class App {
   private initializeMiddlewares() {
     if (this.env === 'production') {
       this.app.use(morgan('combined', { stream }));
+      this.app.set('trust proxy', 1);
       this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
     } else if (this.env === 'development') {
       this.app.use(morgan('dev', { stream }));
@@ -66,6 +68,12 @@ class App {
 
     this.app.use(hpp());
     this.app.use(helmet());
+    // this.app.use(
+    //   rateLimit({
+    //     windowMs: 5 * 60 * 1000, // 15 minutes
+    //     max: 200, // limit each IP to 100 requests per windowMs
+    //   }),
+    // );
     this.app.use(compression());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));

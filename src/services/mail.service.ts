@@ -21,6 +21,28 @@ class EmailService {
         }
       });
     });
+
+    eventEmitter.on(Events.PASSWORD_FORGET, ({ email, token }) => {
+      setImmediate(() => {
+        try {
+          this.emailClient.sendPasswordResetLink(email, token);
+          logger.info(`password reset link sent: ${email}`);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
+
+    eventEmitter.on(Events.EMAIL_CONFIRMATION_REQUEST, ({ email, token }) => {
+      setImmediate(() => {
+        try {
+          this.emailClient.sendEmailConfirmationLink(email, token);
+          logger.info(`password reset link sent: ${email}`);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
   }
 }
 
