@@ -38,6 +38,8 @@ class AuthService {
     const isPasswordMatching: boolean = await bcrypt.compare(userData.password, user.password);
     if (!isPasswordMatching) throw Boom.unauthorized();
 
+    if (!user.emailConfirmed) throw Boom.forbidden('Email not confirmed');
+
     const { token } = AuthService.createToken(user);
 
     return { token, user };
