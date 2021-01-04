@@ -6,6 +6,7 @@ import { UpdateUserDTO, UpdateUserPasswordDTO } from '../../common/dtos';
 import Route from '../../common/interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 import jwtAuthMiddeware from '../middlewares/jwt-cookie-auth.middleware';
+import { UpdateUserPhotoDTO } from '../../common/dtos/user/updateUserPhoto.dto';
 
 class UsersRoute implements Route {
   public path = '/users';
@@ -19,6 +20,20 @@ class UsersRoute implements Route {
   private initializeRoutes() {
     this.router.get(`/user`, [jwtAuthMiddeware], this.usersController.getUser);
     this.router.get(`${this.path}/:id`, this.usersController.getUserById);
+
+    this.router.put(
+      `${this.path}/photo`,
+      [jwtAuthMiddeware, validationMiddleware(UpdateUserPhotoDTO, 'body', false)],
+      this.usersController.updateUserPhoto,
+    );
+    this.router.put(
+      `${this.path}/coverphoto`,
+      [jwtAuthMiddeware, validationMiddleware(UpdateUserPhotoDTO, 'body', false)],
+      this.usersController.updateUserCoverPhoto,
+    );
+    this.router.delete(`${this.path}/photo`, [jwtAuthMiddeware], this.usersController.deleteUserPhoto);
+    this.router.delete(`${this.path}/coverphoto`, [jwtAuthMiddeware], this.usersController.deleteUserCoverPhoto);
+
     this.router.put(`${this.path}`, [jwtAuthMiddeware], validationMiddleware(UpdateUserDTO, 'body', false), this.usersController.updateUser);
     this.router.put(
       `${this.path}/password`,

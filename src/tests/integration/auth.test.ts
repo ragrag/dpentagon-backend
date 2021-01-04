@@ -27,7 +27,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -48,7 +48,7 @@ describe('User Registration', () => {
       await User.save({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         profession: profession,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -57,7 +57,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -74,7 +74,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -91,7 +91,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -125,7 +125,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y23q',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -142,7 +142,7 @@ describe('User Registration', () => {
       const response = await request(app.getServer()).post(`/api/v1/auth/register`).send({
         email: email,
         password: 'a11y2',
-        userType: 'personal',
+        userType: 'freelancer',
         professionId: 1,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -164,7 +164,7 @@ describe('User Login', () => {
       await User.save({
         email: email,
         password: bcrypt.hashSync(password, 10),
-        userType: 'personal',
+        userType: 'freelancer',
         profession: profession,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',
@@ -187,7 +187,7 @@ describe('User Login', () => {
       await User.save({
         email: email,
         password: bcrypt.hashSync(password, 10),
-        userType: 'personal',
+        userType: 'freelancer',
         profession: profession,
         displayName: 'Youssef ElZanaty',
         country: 'Egypt',

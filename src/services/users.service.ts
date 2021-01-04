@@ -1,10 +1,14 @@
 import * as Boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import * as _ from 'lodash';
+import Container from 'typedi';
+import { v4 as uuid } from 'uuid';
 import { UpdateUserDTO, UpdateUserPasswordDTO } from '../common/dtos';
+import { UpdateUserPhotoDTO } from '../common/dtos/user/updateUserPhoto.dto';
 import { isEmpty } from '../common/utils/util';
 import { Profession } from '../entities/profession.entity';
 import { User } from '../entities/users.entity';
+import GCSService from './gcs.service';
 
 class UserService {
   public async findAllUser(): Promise<User[]> {
@@ -30,6 +34,28 @@ class UserService {
     updateUserDTO.profession = profession;
     updateUserDTO = _.omit(updateUserDTO, ['professionId']);
     await User.update(userId, { ...updateUserDTO });
+  }
+
+  public async updateUserPhoto(userId: number, photoDTO: UpdateUserPhotoDTO): Promise<string> {
+    const GCSServiceInstance = Container.get(GCSService);
+    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `${userId}/photos/${uuid()}`);
+    await User.update(userId, { photo: photoUrl });
+    return photoUrl;
+  }
+
+  public async updateUserCoverPhoto(userId: number, photoDTO: UpdateUserPhotoDTO): Promise<string> {
+    const GCSServiceInstance = Container.get(GCSService);
+    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `${userId}/photos/${uuid()}`);
+    await User.update(userId, { coverPhoto: photoUrl });
+    return photoUrl;
+  }
+
+  public async deleteUserPhoto(userId: number): Promise<void> {
+    await User.update(userId, { photo: null });
+  }
+
+  public async deleteUserCoverPhoto(userId: number): Promise<void> {
+    await User.update(userId, { coverPhoto: null });
   }
 
   public async updateUserPassword(userId: number, updateUserPasswordDTO: UpdateUserPasswordDTO): Promise<void> {

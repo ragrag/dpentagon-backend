@@ -1,10 +1,14 @@
 tags:
 - name: Authentication
-  description: Authentication
+  description: Authentication Routes
 - name: User
-  description: User
+  description: User Routes
 - name: Post
-  description: Post
+  description: Post Routes
+- name: Catalogue
+  description: Catalogue Routes
+- name: Profession
+  description: Profession Routes
 
 host: http://localhost:3005
 basePath: /api/v1
@@ -36,7 +40,7 @@ paths:
                 userType:
                   type: string
                   description: user type
-                  example : personal
+                  example: freelancer
                 professionId:
                   type: number
                   description: profession id
@@ -45,6 +49,17 @@ paths:
                   type: string
                   description: display name
                   example: Youssef ElZanaty
+                photo:
+                  type: string
+                  format: base64
+                  description: user photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                coverPhoto:
+                  type: string
+                  format: base64
+                  description: user cover photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                  
                 country:
                   type: string
                   description: country
@@ -302,6 +317,16 @@ paths:
                   type: string
                   description: display name
                   example: Youssef ElZanaty
+                photo:
+                  type: string
+                  format: base64
+                  description: user photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                coverPhoto:
+                  type: string
+                  format: base64
+                  description: user cover photo
+                  example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
                 country:
                   type: string
                   description: country
@@ -398,6 +423,8 @@ paths:
                                 type: string
                                 description: profession name
                                 example: "Graphic Design"
+                          catalogue:
+                            $ref: '#/components/schemas/Catalogue'
                           createdAt:
                             type: string
                             format: date
@@ -408,6 +435,7 @@ paths:
                             format: date
                             description: post updated date
                             example: "2020-09-12"
+                          
                   hasMore:
                     type: boolean          
                     example: true
@@ -417,6 +445,121 @@ paths:
           description: 'Unauthorized'
         404:
           description: 'Not Found'
+
+
+  /api/v1/posts:
+    get:
+      tags:
+      - Post
+      summary: Get posts
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          default: 1
+          minValue: 1
+          description: The number of the current page (skips page*limit)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          default: 20
+          minValue: 1
+          maxValue: 50
+          description: The numbers of items to return
+        - in: query
+          name: profession
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific profession
+          example: "Graphic Design"
+        - in: query
+          name: country
+          schema:
+            type: string
+          default: ''
+          description: find posts from a specific country
+          example: "Egypt"
+        - in: query
+          name: caption
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific caption
+          example: "vector art"
+        - in: query
+          name: userType
+          schema:
+            type: string
+          default: ''
+          description: find posts by a specific user type
+          examples: 
+            freelancer:
+              value: 'freelancer'
+            company:
+              value: 'company'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                          id:
+                            type: number
+                            description: post id
+                            example: 6
+                          caption:
+                            type: string
+                            description: post caption
+                            example: "my new drawing"
+                          postType:
+                            type: string
+                            description: post type
+                            example: "photo"
+                          url:
+                            type: string
+                            description: post content url
+                            example: "https://static.wikia.nocookie.net/vampirediaries/images/1/16/Damon-S8.jpg/revision/latest?cb=20170225081735"
+                          profession:
+                            type: object
+                            description: post profession
+                            properties:
+                              id: 
+                                type: number
+                                description: profession id
+                                example: 1
+                              name:
+                                type: string
+                                description: profession name
+                                example: "Graphic Design"
+                          catalogue:
+                            $ref: '#/components/schemas/Catalogue'
+                          createdAt:
+                            type: string
+                            format: date
+                            description: post creation date
+                            example: "2020-09-12"
+                          updatedAt:
+                            type: string
+                            format: date
+                            description: post updated date
+                            example: "2020-09-12"
+                          
+                  hasMore:
+                    type: boolean          
+                    example: true
+        400:
+          description: 'Bad Request'
+
 
 
   /api/v1/posts/photo:
@@ -442,6 +585,10 @@ paths:
                   format: base64
                   description: base64 image
                   example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                catalogueId:
+                  type: number
+                  description: catalogue id
+                  example: 1
       responses:
         201:
           description: 'CREATED'
@@ -481,7 +628,260 @@ paths:
           description: 'Unauthorized'
         404:
           description: 'Not Found'
+    delete:
+      tags:
+      - Post
+      summary: Delete post by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: post id
+      responses:
+        200:
+          description: 'OK'
+        401:
+          description: 'Unauthorized'
+        404:
+          description: 'Not Found'
 
+  /api/v1/catalogues:
+    post:
+      tags:
+      - Catalogue
+      summary: Create Catalogue
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: catalogue name
+                  required: true
+                  example: Furniture
+      responses:
+        201:
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Catalogue'
+        400:
+          description: 'Bad Request'
+        401:
+          description: 'Unauthorized'
+    get:
+      tags:
+      - Catalogue
+      summary: Get catalogue by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: catalogue id
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Catalogue'
+        404:
+          description: 'Not Found'
+    delete:
+      tags:
+      - Catalogue
+      summary: Delete catalogue by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: catalogue id
+      responses:
+        200:
+          description: 'OK'
+        401:
+          description: 'Unauthorized'
+        404:
+          description: 'Not Found'
+    put:
+      tags:
+      - Catalogue
+      summary: Update catalogue by id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: catalogue name
+                  required: true
+                  example: Furniture
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: catalogue id
+      responses:
+        200:
+          description: 'OK'
+        401:
+          description: 'Unauthorized'
+        404:
+          description: 'Not Found'
+
+
+
+  /api/v1/users/{id}/catalogues:
+    get:
+      tags:
+      - Catalogue
+      summary: Get users catalogues by his id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: user id
+        - in: query
+          name: page
+          schema:
+            type: integer
+          default: 1
+          minValue: 1
+          description: The number of the current page (skips page*limit)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          default: 20
+          minValue: 1
+          maxValue: 50
+          description: The numbers of items to return
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  catalogues:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                          id:
+                            type: number
+                            description: catalogue id
+                            example: 6
+                          name:
+                            type: string
+                            description: catalogue name
+                            example: "Furniture"
+                          createdAt:
+                            type: string
+                            format: date
+                            description: post creation date
+                            example: "2020-09-12"
+                          updatedAt:
+                            type: string
+                            format: date
+                            description: post updated date
+                            example: "2020-09-12"
+                  hasMore:
+                    type: boolean          
+                    example: true
+        400:
+          description: 'Bad Request'
+
+
+  /api/v1/catalogues/{id}/posts:
+      get:
+        tags:
+        - Post
+        summary: Get catalogue posts by its id
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+            description: catalogue id
+          - in: query
+            name: page
+            schema:
+              type: integer
+            default: 1
+            minValue: 1
+            description: The number of the current page (skips page*limit)
+          - in: query
+            name: limit
+            schema:
+              type: integer
+            default: 20
+            minValue: 1
+            maxValue: 50
+            description: The numbers of items to return
+        responses:
+          200:
+            description: 'OK'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    posts:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Post'
+                    hasMore:
+                      type: boolean          
+                      example: true
+          400:
+            description: 'Bad Request'
+
+
+
+  /api/v1/professions:
+    get:
+      tags:
+      - Profession
+      summary: Get all professions
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profession'
+        400:
+          description: 'Bad Request'
+        404:
+          description: 'Not Found'
 
 
 securitySchemes:
@@ -511,7 +911,7 @@ components:
         userType:
           type: string
           description: user type
-          example: "personal"
+          example: "freelancer"
         profession:
           type: object
           description: user profession
@@ -558,6 +958,33 @@ components:
           properties:
             token:
               type: string
+
+    Catalogue:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: catalogue id
+          example: 1
+        name:
+          type: string
+          description: catalogue name
+          example: "Furniture"  
+        user:
+          $ref: '#/components/schemas/User'
+
+    Profession:
+      type: object
+      properties:
+        id: 
+          type: number
+          description: profession id
+          example: 1
+        name:
+          type: string
+          description: profession name
+          example: "Graphic Design"  
+       
     Post:
       type: object
       properties:
@@ -589,8 +1016,8 @@ components:
               type: string
               description: profession name
               example: "Graphic Design"
-        user:
-          $ref: '#/components/schemas/User'
+        catalogue:
+          $ref: '#/components/schemas/Catalogue'
         createdAt:
           type: string
           format: date
@@ -602,5 +1029,4 @@ components:
           description: post updated date
           example: "2020-09-12"
 
-
-            
+    

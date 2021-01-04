@@ -6,7 +6,7 @@ export class UpdateUserDTO {
   // @IsNotEmpty()
   // @IsEnum({
   //   company: 'company',
-  //   personal: 'personal',
+  //   freelancer: 'freelancer',
   // })
   // @Expose()
   // public userType: string;

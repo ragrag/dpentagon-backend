@@ -16,7 +16,7 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @IsEnum({
     company: 'company',
-    personal: 'personal',
+    freelancer: 'freelancer',
   })
   @Expose()
   public userType: string;
