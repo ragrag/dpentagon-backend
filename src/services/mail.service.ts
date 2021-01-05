@@ -16,7 +16,6 @@ class EmailService {
         try {
           // this.emailClient.sendWelcomeEmail(email);
           this.emailClient.sendEmailConfirmation(email, token);
-          logger.info(`email confirmation link sent: ${email}`);
         } catch (err) {
           console.log(err);
         }
@@ -27,7 +26,6 @@ class EmailService {
       setImmediate(() => {
         try {
           this.emailClient.sendPasswordResetLink(email, token);
-          logger.info(`password reset link sent: ${email}`);
         } catch (err) {
           console.log(err);
         }
@@ -38,7 +36,6 @@ class EmailService {
       setImmediate(() => {
         try {
           this.emailClient.sendEmailConfirmation(email, token);
-          logger.info(`email confirmation link sent: ${email}`);
         } catch (err) {
           console.log(err);
         }

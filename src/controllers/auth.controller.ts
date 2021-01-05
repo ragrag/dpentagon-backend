@@ -27,7 +27,6 @@ class AuthController {
         secure: true,
       });
 
-      eventEmitter.emit(Events.USER_REGISTRATION, { email: user.email });
       const userResponse = _.omit(user, ['password']);
       res.status(201).json({ ...userResponse, token });
     } catch (error) {
