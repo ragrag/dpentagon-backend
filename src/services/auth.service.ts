@@ -26,9 +26,12 @@ class AuthService {
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const createUserData: User = await User.save(plainToClass(User, { ...userData, password: hashedPassword, profession: profession }));
+    const createdUser: User = await User.save(plainToClass(User, { ...userData, password: hashedPassword, profession: profession }));
 
-    return createUserData;
+    const { token: emailConfirmationToken } = AuthService.createEmailToken(createdUser.email);
+    eventEmitter.emit(Events.USER_REGISTRATION, { email: createdUser.email, token: emailConfirmationToken });
+
+    return createdUser;
   }
 
   public async login(userData: LoginUserDTO): Promise<{ token: string; user: User }> {
@@ -52,7 +55,7 @@ class AuthService {
   public async resetPassword(passwordResetDTO: ResetPasswordDTO): Promise<void> {
     let email;
     try {
-      const tokenData = (await jwt.verify(passwordResetDTO.token, process.env.JWT_SECRET)) as EmailToken;
+      const tokenData = (await jwt.verify(passwordResetDTO.token, process.env.JWT_RESET_SECRET)) as EmailToken;
       email = tokenData.email;
     } catch (err) {
       throw Boom.resourceGone('password reset link expired');
@@ -70,7 +73,7 @@ class AuthService {
   public async confirmEmail(confirmEmailDTO: ConfirmEmailDTO): Promise<void> {
     let email;
     try {
-      const tokenData = (await jwt.verify(confirmEmailDTO.token, process.env.JWT_SECRET)) as EmailToken;
+      const tokenData = (await jwt.verify(confirmEmailDTO.token, process.env.JWT_RESET_SECRET)) as EmailToken;
       email = tokenData.email;
     } catch (err) {
       throw Boom.resourceGone('confirmation link expired');

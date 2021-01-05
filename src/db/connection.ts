@@ -21,6 +21,7 @@ const dbConnection: ConnectionOptions = {
     migrationsDir: 'src/db/migrations',
     subscribersDir: 'src/db/subscribers',
   },
+
   // migrationsRun: true,
   ssl: env === 'production',
   extra: {
