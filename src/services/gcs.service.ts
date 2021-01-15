@@ -21,7 +21,7 @@ class GCSService {
     try {
       const imageBuffer = convertBase64ToBuffer(photoBase64);
       const bucket = await this.storage.bucket(this.BUCKET_NAME);
-      uploadName = `instagram/${uploadName}`;
+      uploadName = `dpentagon/${uploadName}`;
       const file = bucket.file(uploadName);
       await file.save(imageBuffer, {
         metadata: { contentType: 'image/jpeg' },

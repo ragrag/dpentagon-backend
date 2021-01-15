@@ -48,7 +48,7 @@ class CatalogueService {
       .where('user.id = :id', { id: userId })
       .orderBy('catalogue.createdAt', 'DESC')
       .skip((page - 1) * limit)
-      .limit(limit + 1)
+      .take(limit + 1)
       .getMany();
     const hasMore = catalogues.length > limit;
     if (hasMore) catalogues = catalogues.slice(0, limit);

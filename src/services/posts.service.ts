@@ -14,7 +14,7 @@ class PostService {
     if (!catalogue) throw Boom.notFound("Catalogue Doesn't exist");
     if (catalogue.user.id !== user.id) throw Boom.unauthorized("You don't own this catalogue");
     const GCSServiceInstance = Container.get(GCSService);
-    const postPhotoUrl = await GCSServiceInstance.uploadBase64(postDTO.content, `${user.id}/posts/${uuid()}`);
+    const postPhotoUrl = await GCSServiceInstance.uploadBase64(postDTO.content, `users/${user.id}/posts/${uuid()}`);
     const post: Post = await Post.save({
       caption: postDTO.caption,
       postType: 'photo',
@@ -34,16 +34,16 @@ class PostService {
     // console.log(queryParams.profession.split(';'));
     if (queryParams.profession)
       query.where('LOWER(profession.name) IN (:...professions)', { professions: queryParams.profession.split(';').map(el => el.toLowerCase()) });
-    if (queryParams.userType) query.andWhere('LOWER(user.userType) = :userType', { userType: queryParams.userType.toLowerCase() });
+    if (queryParams.userType) query.andWhere('user.userType = :userType', { userType: queryParams.userType.toLowerCase() });
     if (queryParams.country) query.andWhere('LOWER(user.country) = :country', { country: queryParams.country.toLowerCase() });
     if (queryParams.caption) query.andWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
 
     let posts = await query
       .orderBy('post.createdAt', 'DESC')
       .skip((page - 1) * limit)
-      .limit(limit + 1)
+      .take(limit + 1)
       .getMany();
-
+    console.log(posts);
     const hasMore = posts.length > limit;
     if (hasMore) posts = posts.slice(0, limit);
     return { posts, hasMore };
@@ -70,7 +70,7 @@ class PostService {
       .where('user.id = :id', { id: userId })
       .orderBy('post.createdAt', 'DESC')
       .skip((page - 1) * limit)
-      .limit(limit + 1)
+      .take(limit + 1)
       .getMany();
     const hasMore = posts.length > limit;
     if (hasMore) posts = posts.slice(0, limit);
@@ -85,7 +85,7 @@ class PostService {
       .where('catalogue.id = :id', { id: catalogueId })
       .orderBy('post.createdAt', 'DESC')
       .skip((page - 1) * limit)
-      .limit(limit + 1)
+      .take(limit + 1)
       .getMany();
     const hasMore = posts.length > limit;
     if (hasMore) posts = posts.slice(0, limit);
