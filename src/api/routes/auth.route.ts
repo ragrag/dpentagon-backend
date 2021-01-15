@@ -41,6 +41,7 @@ class AuthRoute implements Route {
     this.router.post(`${this.path}/email/confirm`, validationMiddleware(ConfirmEmailDTO, 'body', false), this.authController.confirmEmail);
 
     this.router.post(`${this.path}/logout`, [jwtAuthMiddeware], this.authController.logout);
+
     this.router.post(
       `/oauth/facebook`,
       [

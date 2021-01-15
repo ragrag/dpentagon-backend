@@ -31,8 +31,9 @@ class PostService {
       .leftJoinAndSelect('post.catalogue', 'catalogue')
       .leftJoinAndSelect('catalogue.user', 'user')
       .leftJoinAndSelect('post.profession', 'profession');
-
-    if (queryParams.profession) query.where('LOWER(profession.name) = :professionName', { professionName: queryParams.profession.toLowerCase() });
+    // console.log(queryParams.profession.split(';'));
+    if (queryParams.profession)
+      query.where('LOWER(profession.name) IN (:...professions)', { professions: queryParams.profession.split(';').map(el => el.toLowerCase()) });
     if (queryParams.userType) query.andWhere('LOWER(user.userType) = :userType', { userType: queryParams.userType.toLowerCase() });
     if (queryParams.country) query.andWhere('LOWER(user.country) = :country', { country: queryParams.country.toLowerCase() });
     if (queryParams.caption) query.andWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });

@@ -20,12 +20,12 @@ class AuthController {
       const user: User = await this.authService.register(userData);
       const token = AuthService.createAuthToken(user);
 
-      res.cookie('Authorization', token, {
-        httpOnly: true,
-        signed: true,
-        sameSite: 'strict',
-        secure: true,
-      });
+      // res.cookie('Authorization', token, {
+      //   httpOnly: true,
+      //   signed: true,
+      //   sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'strict',
+      //   secure: process.env.NODE_ENV === 'development' ? false : true,
+      // });
 
       const userResponse = _.omit(user, ['password']);
       res.status(201).json({ ...userResponse, token });
@@ -42,8 +42,9 @@ class AuthController {
       res.cookie('Authorization', token, {
         httpOnly: true,
         signed: true,
-        sameSite: 'strict',
-        secure: true,
+        sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'strict',
+        secure: process.env.NODE_ENV === 'development' ? false : true,
+        expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000),
       });
 
       const userResponse = _.omit(user, ['password']);
@@ -60,8 +61,8 @@ class AuthController {
     res.cookie('Authorization', token, {
       httpOnly: true,
       signed: true,
-      sameSite: 'strict',
-      secure: true,
+      sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'strict',
+      secure: process.env.NODE_ENV === 'development' ? false : true,
     });
     const userResponse = _.pick(req.user, ['email', 'displayName', 'id']);
     return res.status(200).json({ token: token, ...userResponse });
