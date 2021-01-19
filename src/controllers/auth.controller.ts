@@ -42,7 +42,8 @@ class AuthController {
       res.cookie('Authorization', token, {
         httpOnly: true,
         signed: true,
-        sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'strict',
+        // sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'strict',
+        sameSite: 'none',
         secure: process.env.NODE_ENV === 'development' ? false : true,
         expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000),
       });
