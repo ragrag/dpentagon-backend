@@ -38,14 +38,14 @@ class UserService {
 
   public async updateUserPhoto(userId: number, photoDTO: UpdateUserPhotoDTO): Promise<string> {
     const GCSServiceInstance = Container.get(GCSService);
-    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `${userId}/photos/${uuid()}`);
+    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `users/${userId}/photos/displayphoto`);
     await User.update(userId, { photo: photoUrl });
     return photoUrl;
   }
 
   public async updateUserCoverPhoto(userId: number, photoDTO: UpdateUserPhotoDTO): Promise<string> {
     const GCSServiceInstance = Container.get(GCSService);
-    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `${userId}/photos/${uuid()}`);
+    const photoUrl = await GCSServiceInstance.uploadBase64(photoDTO.photo, `users/${userId}/photos/coverphoto`);
     await User.update(userId, { coverPhoto: photoUrl });
     return photoUrl;
   }

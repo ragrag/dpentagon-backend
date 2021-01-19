@@ -60,7 +60,7 @@ class App {
     if (this.env === 'production') {
       this.app.use(morgan('combined', { stream }));
       this.app.set('trust proxy', 1);
-      this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
+      this.app.use(cors({ origin: 'www.dpentagon.com', credentials: true }));
     } else if (this.env === 'development') {
       this.app.use(morgan('dev', { stream }));
       this.app.use(cors({ origin: true, credentials: true }));
@@ -75,8 +75,8 @@ class App {
     //   }),
     // );
     this.app.use(compression());
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json({ limit: '5mb' }));
+    this.app.use(express.urlencoded({ limit: '5mb', extended: true }));
     this.app.use(cookieParser(process.env.JWT_SECRET));
   }
 

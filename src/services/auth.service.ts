@@ -37,7 +37,20 @@ class AuthService {
   public async login(userData: LoginUserDTO): Promise<{ token: string; user: User }> {
     const user: User = await User.findOne({
       where: { email: userData.email },
-      select: ['id', 'password', 'email', 'emailConfirmed', 'profileInfo', 'userType', 'profession', 'displayName', 'country', 'phoneNumber'],
+      select: [
+        'id',
+        'password',
+        'email',
+        'emailConfirmed',
+        'profileInfo',
+        'userType',
+        'profession',
+        'displayName',
+        'country',
+        'phoneNumber',
+        'createdAt',
+        'updatedAt',
+      ],
       relations: ['profession'],
     });
     if (!user) throw Boom.notFound();

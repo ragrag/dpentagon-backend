@@ -43,15 +43,16 @@ class CatalogueService {
   }
 
   public async getUserCatalogues(userId: number, { page, limit }): Promise<{ catalogues: Catalogue[]; hasMore: boolean }> {
-    let catalogues = await Catalogue.createQueryBuilder('catalogue')
+    const catalogues = await Catalogue.createQueryBuilder('catalogue')
       .leftJoin('catalogue.user', 'user')
       .where('user.id = :id', { id: userId })
       .orderBy('catalogue.createdAt', 'DESC')
-      .skip((page - 1) * limit)
-      .take(limit + 1)
+      // .skip((page - 1) * limit)
+      // .take(limit + 1)
       .getMany();
-    const hasMore = catalogues.length > limit;
-    if (hasMore) catalogues = catalogues.slice(0, limit);
+    // const hasMore = catalogues.length > limit;
+    // if (hasMore) catalogues = catalogues.slice(0, limit);
+    const hasMore = false;
     return { catalogues, hasMore };
   }
 }

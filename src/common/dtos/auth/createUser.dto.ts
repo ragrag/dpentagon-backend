@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDTO {
   @IsNotEmpty()
@@ -36,8 +36,12 @@ export class CreateUserDTO {
   @Expose()
   public country: string;
 
-  @IsNotEmpty()
   @IsPhoneNumber(null)
   @Expose()
   public phoneNumber: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  public address: string;
 }

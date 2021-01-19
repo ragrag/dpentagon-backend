@@ -28,19 +28,19 @@ export class UpdateUserDTO {
   @Expose()
   public country: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsPhoneNumber(null)
-  @IsOptional()
   @Expose()
   public phoneNumber: string;
 
-  @IsNotEmpty()
   @IsOptional()
+  @IsNotEmpty()
   @Expose()
   public address: string;
 
-  @IsNotEmpty()
   @IsOptional()
+  @IsNotEmpty()
   @Expose()
   public profileInfo: string;
 }

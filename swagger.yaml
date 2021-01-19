@@ -960,6 +960,16 @@ components:
           type: string
           description: User address
           example: "124 Baker St"
+        createdAt:
+          type: string
+          format: date
+          description: user creation date
+          example: "2020-09-12"
+        updatedAt:
+          type: string
+          format: date
+          description: user updated date
+          example: "2020-09-12"
 
     UserWithToken:
       allOf:     

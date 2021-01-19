@@ -9,6 +9,8 @@ function errorMiddleware(error: Boom | Error, req: Request, res: Response, next:
   const errorMessage: string = isBoom(error) ? error.message : 'Something went wrong';
   logger.error(`StatusCode : ${statusCode}, Message : ${errorMessage}`);
 
-  return res.status(statusCode).send(errorMessage);
+  return res.status(statusCode).send({
+    message: errorMessage,
+  });
 }
 export default errorMiddleware;
