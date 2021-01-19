@@ -60,7 +60,7 @@ class App {
     if (this.env === 'production') {
       this.app.use(morgan('combined', { stream }));
       this.app.set('trust proxy', 1);
-      this.app.use(cors({ origin: '*.dpentagon.com', credentials: true }));
+      this.app.use(cors({ origin: 'https://www.dpentagon.com', credentials: true }));
     } else if (this.env === 'development') {
       this.app.use(morgan('dev', { stream }));
       this.app.use(cors({ origin: true, credentials: true }));
