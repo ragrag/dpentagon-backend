@@ -30,6 +30,7 @@ class PostService {
     const query = Post.createQueryBuilder('post')
       .leftJoinAndSelect('post.catalogue', 'catalogue')
       .leftJoinAndSelect('catalogue.user', 'user')
+      .leftJoinAndSelect('user.profession', 'user_profession')
       .leftJoinAndSelect('post.profession', 'profession');
     // console.log(queryParams.profession.split(';'));
     if (queryParams.profession)
@@ -43,7 +44,7 @@ class PostService {
       .skip((page - 1) * limit)
       .take(limit + 1)
       .getMany();
-    console.log(posts);
+
     const hasMore = posts.length > limit;
     if (hasMore) posts = posts.slice(0, limit);
     return { posts, hasMore };
