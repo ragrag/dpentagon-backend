@@ -23,10 +23,10 @@ const dbConnection: ConnectionOptions = {
   },
 
   // migrationsRun: true,
-  ssl: env === 'production',
+  ssl: env === 'production' || env === 'migration',
   extra: {
     rejectUnauthorized: !(env === 'production'),
-    ssl: env === 'production',
+    ssl: env === 'production' || env === 'migration',
   },
   // dropSchema: true,
 };
