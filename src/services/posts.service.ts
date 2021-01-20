@@ -33,7 +33,7 @@ class PostService {
       .leftJoinAndSelect('catalogue.user', 'user')
       .leftJoinAndSelect('user.profession', 'user_profession')
       .leftJoinAndSelect('post.profession', 'profession');
-    // console.log(queryParams.profession.split(';'));
+    console.log(queryParams);
     if (queryParams.profession)
       query.where('LOWER(profession.name) IN (:...professions)', { professions: queryParams.profession.split(';').map(el => el.toLowerCase()) });
     if (queryParams.userType) query.andWhere('user.userType = :userType', { userType: queryParams.userType.toLowerCase() });
