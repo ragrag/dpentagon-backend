@@ -7,7 +7,7 @@ class GCSService {
   private BUCKET_NAME;
   constructor() {
     const privateKey = _.replace(process.env.GCS_PRIVATE_KEY, new RegExp('\\\\n', 'g'), '\n');
-    this.BUCKET_NAME = 'this-or-that';
+    this.BUCKET_NAME = 'dpentagon';
     this.storage = new Storage({
       projectId: process.env.GCS_PROJECT_ID,
       credentials: {
