@@ -5,7 +5,11 @@ import { User } from './users.entity';
 
 @Entity('post')
 export class Post extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+    unsigned: true,
+    name: 'id',
+  })
   id: number;
 
   // @ManyToOne(() => User, user => user.posts, { eager: true, nullable: false })

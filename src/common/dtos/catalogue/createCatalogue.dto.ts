@@ -1,8 +1,10 @@
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateCatalogueDTO {
+  @IsNotEmpty()
   @IsString()
+  @MinLength(1)
   @Expose()
   public name: string;
 }

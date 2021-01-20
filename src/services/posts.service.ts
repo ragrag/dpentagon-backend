@@ -15,6 +15,7 @@ class PostService {
     if (catalogue.user.id !== user.id) throw Boom.unauthorized("You don't own this catalogue");
     const GCSServiceInstance = Container.get(GCSService);
     const postPhotoUrl = await GCSServiceInstance.uploadBase64(postDTO.content, `users/${user.id}/posts/${uuid()}`);
+
     const post: Post = await Post.save({
       caption: postDTO.caption,
       postType: 'photo',
@@ -82,6 +83,7 @@ class PostService {
     let posts: Post[] = await Post.createQueryBuilder('post')
       .leftJoinAndSelect('post.catalogue', 'catalogue')
       .leftJoinAndSelect('catalogue.user', 'user')
+      .leftJoinAndSelect('user.profession', 'user_profession')
       .leftJoinAndSelect('post.profession', 'profession')
       .where('catalogue.id = :id', { id: catalogueId })
       .orderBy('post.createdAt', 'DESC')

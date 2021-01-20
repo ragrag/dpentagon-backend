@@ -21,7 +21,11 @@ import { Profession } from './profession.entity';
 @Entity('user')
 @Unique(['email'])
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    unsigned: true,
+    name: 'id',
+  })
   id: number;
 
   @Column({ nullable: false })

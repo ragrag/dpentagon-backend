@@ -5,7 +5,11 @@ import { User } from './users.entity';
 
 @Entity('catalogue')
 export class Catalogue extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    unsigned: true,
+    name: 'id',
+  })
   id: number;
 
   @ManyToOne(() => User, user => user.catalogues, { eager: true, nullable: false })

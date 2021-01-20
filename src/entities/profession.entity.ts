@@ -3,7 +3,11 @@ import { Post } from './post.entity';
 
 @Entity('profession')
 export class Profession extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'int',
+    unsigned: true,
+    name: 'id',
+  })
   id: number;
 
   @Column({ nullable: false })
