@@ -18,7 +18,7 @@ class AuthService {
   public async register(userData: CreateUserDTO): Promise<User> {
     if (isEmpty(userData)) throw Boom.badRequest();
 
-    const findUser: User = await User.findOne({ where: { email: userData.email } });
+    const findUser: User = await User.findOne({ where: { email: userData.email.toLowerCase() } });
     if (findUser) throw Boom.conflict(`a user with the email ${userData.email} already exists`);
 
     const profession: Profession = await Profession.findOne(userData.professionId);
@@ -26,17 +26,19 @@ class AuthService {
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const createdUser: User = await User.save(plainToClass(User, { ...userData, password: hashedPassword, profession: profession }));
+    const createdUser: User = await User.save(
+      plainToClass(User, { ...userData, email: userData.email.toLowerCase(), password: hashedPassword, profession: profession }),
+    );
 
-    const { token: emailConfirmationToken } = AuthService.createEmailToken(createdUser.email);
-    eventEmitter.emit(Events.USER_REGISTRATION, { email: createdUser.email, token: emailConfirmationToken });
+    const { token: emailConfirmationToken } = AuthService.createEmailToken(createdUser.email.toLowerCase());
+    eventEmitter.emit(Events.USER_REGISTRATION, { email: createdUser.email.toLowerCase(), token: emailConfirmationToken });
 
     return createdUser;
   }
 
   public async login(userData: LoginUserDTO): Promise<{ token: string; user: User }> {
     const user: User = await User.findOne({
-      where: { email: userData.email },
+      where: { email: userData.email.toLowerCase() },
       select: [
         'id',
         'password',
@@ -77,7 +79,7 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(passwordResetDTO.password, 10);
     await User.update(
       {
-        email: email,
+        email: email.toLowerCase(),
       },
       { password: hashedPassword },
     );
@@ -87,7 +89,7 @@ class AuthService {
     let email;
     try {
       const tokenData = (await jwt.verify(confirmEmailDTO.token, process.env.JWT_RESET_SECRET)) as EmailToken;
-      email = tokenData.email;
+      email = tokenData.email.toLowerCase();
     } catch (err) {
       throw Boom.resourceGone('confirmation link expired');
     }
@@ -95,17 +97,17 @@ class AuthService {
   }
 
   public async sendPasswordResetEmail(forgetPasswordDTO: ForgetPasswordDTO): Promise<void> {
-    const user = await User.findOne({ where: { email: forgetPasswordDTO.email } });
+    const user = await User.findOne({ where: { email: forgetPasswordDTO.email.toLowerCase() } });
     if (!user) throw Boom.notFound("User with this email doesn't exist");
-    const { token } = AuthService.createEmailToken(forgetPasswordDTO.email);
-    eventEmitter.emit(Events.PASSWORD_RESET, { email: forgetPasswordDTO.email, token });
+    const { token } = AuthService.createEmailToken(forgetPasswordDTO.email.toLowerCase());
+    eventEmitter.emit(Events.PASSWORD_RESET, { email: forgetPasswordDTO.email.toLowerCase(), token });
   }
 
   public async sendEmailConfirmation(confirmationEmailDTO: SendConfirmationEmailDTO): Promise<void> {
-    const user = await User.findOne({ where: { email: confirmationEmailDTO.email } });
+    const user = await User.findOne({ where: { email: confirmationEmailDTO.email.toLowerCase() } });
     if (!user) throw Boom.notFound("User with this email doesn't exist");
-    const { token } = AuthService.createEmailToken(confirmationEmailDTO.email, '3d');
-    eventEmitter.emit(Events.CONFIRMATION_EMAIL, { email: confirmationEmailDTO.email, token });
+    const { token } = AuthService.createEmailToken(confirmationEmailDTO.email.toLowerCase(), '3d');
+    eventEmitter.emit(Events.CONFIRMATION_EMAIL, { email: confirmationEmailDTO.email.toLowerCase(), token });
   }
 
   public static createAuthToken(user: User, expiresIn = '7d'): TokenData {
