@@ -31,8 +31,12 @@ class UserService {
 
     const profession = await Profession.findOne(updateUserDTO.professionId);
     if (!profession) throw Boom.notFound("Profession doesn't exist");
+
     updateUserDTO.profession = profession;
     updateUserDTO = _.omit(updateUserDTO, ['professionId']);
+
+    //validate company having a null address
+    if (findUser.userType === 'company' && !updateUserDTO.address) throw Boom.badRequest('Companies must have an address');
     await User.update(userId, { ...updateUserDTO });
   }
 

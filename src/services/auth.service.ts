@@ -52,6 +52,7 @@ class AuthService {
         'phoneNumber',
         'createdAt',
         'updatedAt',
+        'website',
       ],
       relations: ['profession'],
     });

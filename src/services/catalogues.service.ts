@@ -28,11 +28,19 @@ class CatalogueService {
   public async updateCatalogueById(
     user: User,
     { catalogueId, catalogueDTO }: { catalogueId: number; catalogueDTO: UpdateCatalogueDTO },
-  ): Promise<void> {
+  ): Promise<string> {
     const catalogue = await Catalogue.findOne(catalogueId);
     if (!catalogue) throw Boom.notFound("Catalogue Doesn't exist");
     if (catalogue.user.id !== user.id) throw Boom.unauthorized("You don't own this catalogue");
+
+    if (catalogueDTO.photo) {
+      const GCSServiceInstance = Container.get(GCSService);
+      catalogueDTO.photo = await GCSServiceInstance.uploadBase64(catalogueDTO.photo, `users/${user.id}/catalogues/${uuid()}`);
+    }
+
     await Catalogue.update(catalogueId, { ...catalogueDTO });
+
+    return catalogueDTO.photo;
   }
 
   public async deleteCatalogueById(user: User, catalogueId): Promise<void> {

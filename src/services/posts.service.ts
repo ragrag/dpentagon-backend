@@ -38,8 +38,12 @@ class PostService {
       query.where('LOWER(profession.name) IN (:...professions)', { professions: queryParams.profession.split(';').map(el => el.toLowerCase()) });
     if (queryParams.userType) query.andWhere('user.userType = :userType', { userType: queryParams.userType.toLowerCase() });
     if (queryParams.country) query.andWhere('LOWER(user.country) = :country', { country: queryParams.country.toLowerCase() });
-    if (queryParams.caption) query.andWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
-
+    if (queryParams.caption) {
+      query.orWhere('LOWER(post.caption) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
+      query.orWhere('LOWER(user.displayName) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
+      query.orWhere('LOWER(profession.name) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
+      query.orWhere('LOWER(catalogue.name) ILIKE :caption', { caption: `%${queryParams.caption.toLowerCase()}%` });
+    }
     let posts = await query
       .orderBy('post.createdAt', 'DESC')
       .skip((page - 1) * limit)

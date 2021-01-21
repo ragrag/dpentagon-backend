@@ -43,8 +43,8 @@ class CataloguesController {
     try {
       const catalogueId = Number(req.params.id);
       const catalogueDTO: UpdateCatalogueDTO = plainToClass(UpdateCatalogueDTO, req.body, { excludeExtraneousValues: true });
-      await this.cataloguesService.updateCatalogueById(req.user, { catalogueId, catalogueDTO });
-      res.status(200).send();
+      const newCataloguePhotoUrl = await this.cataloguesService.updateCatalogueById(req.user, { catalogueId, catalogueDTO });
+      res.status(200).send({ url: newCataloguePhotoUrl });
     } catch (error) {
       next(error);
     }

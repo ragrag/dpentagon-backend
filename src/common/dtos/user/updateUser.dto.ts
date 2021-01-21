@@ -35,12 +35,17 @@ export class UpdateUserDTO {
   public phoneNumber: string;
 
   @IsOptional()
-  @IsNotEmpty()
+  @IsString()
   @Expose()
   public address: string;
 
   @IsOptional()
-  @IsNotEmpty()
+  @IsString()
+  @Expose()
+  public website: string;
+
+  @IsOptional()
+  @IsString()
   @Expose()
   public profileInfo: string;
 }

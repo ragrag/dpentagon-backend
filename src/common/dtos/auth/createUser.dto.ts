@@ -44,4 +44,9 @@ export class CreateUserDTO {
   @IsString()
   @Expose()
   public address: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  public website: string;
 }

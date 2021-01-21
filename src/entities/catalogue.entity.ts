@@ -21,6 +21,9 @@ export class Catalogue extends BaseEntity {
   @Column({ nullable: false })
   name: string;
 
+  @Column({ nullable: true })
+  photo: string;
+
   @Column()
   @CreateDateColumn()
   createdAt: Date;
