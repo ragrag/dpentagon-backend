@@ -14,6 +14,7 @@ import { ResetPasswordDTO } from '../../common/dtos/auth/resetPassword.dto';
 import { SendConfirmationEmailDTO } from '../../common/dtos/auth/sendConfirmationEmail.dto';
 import { ConfirmEmailDTO } from '../../common/dtos/auth/confirmEmail.dto';
 import { emailRateLimit } from '../../common/utils/emailRateLimit';
+import { loginRateLimit } from '../../common/utils/loginRateLimit';
 
 class AuthRoute implements Route {
   public path = '/auth';
@@ -26,7 +27,7 @@ class AuthRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/register`, validationMiddleware(CreateUserDTO, 'body'), this.authController.register);
-    this.router.post(`${this.path}/login`, validationMiddleware(LoginUserDTO, 'body'), this.authController.login);
+    this.router.post(`${this.path}/login`, [loginRateLimit, validationMiddleware(LoginUserDTO, 'body')], this.authController.login);
     this.router.post(
       `${this.path}/password/forget`,
       [emailRateLimit, validationMiddleware(ForgetPasswordDTO, 'body', false)],
