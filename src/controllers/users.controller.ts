@@ -18,6 +18,15 @@ class UsersController {
     }
   };
 
+  public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      await this.userService.deleteUser(req.user.id);
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
@@ -91,17 +100,6 @@ class UsersController {
       await this.userService.updateUserPassword(userId, updateUserPasswordDTO);
 
       res.status(200).json();
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userId = Number(req.params.id);
-      const deleteUserData: User = await this.userService.deleteUser(userId);
-
-      res.status(200).json({ data: deleteUserData, message: 'deleted' });
     } catch (error) {
       next(error);
     }

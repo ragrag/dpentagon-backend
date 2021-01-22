@@ -12,7 +12,7 @@ export class Catalogue extends BaseEntity {
   })
   id: number;
 
-  @ManyToOne(() => User, user => user.catalogues, { eager: true, nullable: false })
+  @ManyToOne(() => User, user => user.catalogues, { eager: true, nullable: false, onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(() => Post, post => post.catalogue)

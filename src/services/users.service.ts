@@ -72,12 +72,8 @@ class UserService {
     await User.update(userId, { password: hashedPassword });
   }
 
-  public async deleteUser(userId: number): Promise<User> {
-    const findUser: User = await User.findOne({ where: { id: userId } });
-    if (!findUser) throw Boom.notFound();
-
+  public async deleteUser(userId: number): Promise<void> {
     await User.delete({ id: userId });
-    return findUser;
   }
 }
 
