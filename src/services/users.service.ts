@@ -20,6 +20,10 @@ class UserService {
     const findUser: User = await User.findOne(userId);
     if (!findUser) throw Boom.notFound();
 
+    if (findUser.private) {
+      findUser.phoneNumber = null;
+      findUser.address = null;
+    }
     return findUser;
   }
 

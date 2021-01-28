@@ -50,6 +50,10 @@ export class User extends BaseEntity {
   country: string;
 
   @Index()
+  @Column({ nullable: true, default: false })
+  private: boolean;
+
+  @Index()
   @Column({ nullable: true })
   website: string;
 

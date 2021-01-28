@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { Profession } from '../../../entities/profession.entity';
 
 export class UpdateUserDTO {
@@ -27,6 +27,10 @@ export class UpdateUserDTO {
   @IsString()
   @Expose()
   public country: string;
+
+  @IsBoolean()
+  @Expose()
+  public private: boolean;
 
   @IsOptional()
   @IsNotEmpty()
